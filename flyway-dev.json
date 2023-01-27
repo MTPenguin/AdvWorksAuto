@@ -1,0 +1,36 @@
+{
+  "version": "2.0",
+  "name": "AdvWorksAuto",
+  "id": "6c7b3386-139e-48e4-8aad-5016a2be6760",
+  "databaseType": "SqlServer",
+  "development": {
+    "scriptsFolder": "./schema-model"
+  },
+  "deployment": {
+    "flywayConfFiles": [
+      "./flyway.conf"
+    ],
+    "targetDatabases": [
+      {
+        "connectionProvider": {
+          "type": "UsernamePassword",
+          "url": "jdbc:sqlserver://10.211.55.2;authentication=sqlPassword;databaseName=AdventureWorksLT2019;encrypt=true;integratedSecurity=false;trustServerCertificate=true",
+          "username": "sa",
+          "password": {
+            "secretType": "DefaultSecretStore",
+            "name": "Flyway Desktop cf44f5f4-ddae-4570-9ddf-fda3faa34503"
+          }
+        },
+        "schemas": [],
+        "displayName": "AdvWorks"
+      }
+    ]
+  },
+  "developmentDatabase": {
+    "connectionProvider": {
+      "type": "UsernamePassword",
+      "url": "jdbc:sqlserver://10.211.55.2;authentication=sqlPassword;databaseName=AdventureWorksLT2019_Dev;encrypt=true;integratedSecurity=false;trustServerCertificate=true"
+    },
+    "displayName": "AdvWorks_Dev"
+  }
+}
