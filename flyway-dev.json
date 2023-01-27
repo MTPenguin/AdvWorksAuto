@@ -24,7 +24,8 @@
         "schemas": [],
         "displayName": "AdvWorks"
       }
-    ]
+    ],
+    "generateUndoScripts": true
   },
   "developmentDatabase": {
     "connectionProvider": {
