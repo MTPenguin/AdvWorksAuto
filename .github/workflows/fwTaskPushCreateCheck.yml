@@ -133,5 +133,4 @@ jobs:
         - name: create pull request
           run: |
             gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action'
-            
-          # gh pr merge --auto --merge
+            gh pr merge --auto --merge
