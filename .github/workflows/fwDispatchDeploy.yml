@@ -5,26 +5,10 @@ run-name: Deploy ${{ inputs.from_label }} - ${{ inputs.commit_message }} to ${{ 
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "release" branch
-  #push:
-    #branches:
-      #- release
-      #- 'migrations/**'
- 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-    inputs:
-      from_label:
-        description: 'From Label'
-        required: false
-        default: '?'
-      to_label:
-        description: 'To Label'
-        required: false
-        default: '?'
-      commit_message:
-        description: 'Head Commit Message'
-        required: false
+  # Triggers the workflow on pull request review.  And then filtered later for approval.
+  pull_request_review:
+    types: [submitted]
+    branch: task**
 
 env:
  
@@ -41,7 +25,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: self-hosted
     environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
-    if: ${{ true }} #Set this variable to false to temporarily disable the job
+    if: github.event.review.state == 'approved' #On approval
     env:
       stage: 'Prod'
       databaseName: ${{ secrets.databaseName}}
