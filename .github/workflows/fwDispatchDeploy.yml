@@ -1,0 +1,61 @@
+# This is a basic workflow to help you get started with Actions
+ 
+name: Flyway Dispatch Deploy Pipeline (Self-Hosted)
+run-name: Deploy ${{ inputs.from_label }} - ${{ inputs.commit_message }} to ${{ inputs.to_label }}
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "release" branch
+  #push:
+    #branches:
+      #- release
+      #- 'migrations/**'
+ 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      from_label:
+        description: 'From Label'
+        required: false
+        default: '?'
+      to_label:
+        description: 'To Label'
+        required: false
+        default: '?'
+      commit_message:
+        description: 'Head Commit Message'
+        required: false
+
+env:
+ 
+  FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
+  # If the first undo script is U002, this will validate all undo scripts up to and including that
+  FIRST_UNDO_SCRIPT: ${{ secrets.FIRST_UNDO_SCRIPT }}
+  # Enable this for additional debug logging
+  ACTIONS_RUNNER_DEBUG: true 
+ 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  prod:
+    name: Deploy Production
+    # The type of runner that the job will run on
+    runs-on: self-hosted
+    environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+    if: ${{ true }} #Set this variable to false to temporarily disable the job
+    env:
+      stage: 'Prod'
+      databaseName: ${{ secrets.databaseName}}
+      JDBC: ${{ secrets.JDBC }}
+      userName: ${{ secrets.userName }}
+      password: ${{ secrets.password }}
+ 
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        
+      # Runs the Flyway Migrate against the Production database
+      - name: Migrate Build DB
+        if: ${{ true }}
+        run: |
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
