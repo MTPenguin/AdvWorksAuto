@@ -32,5 +32,16 @@
       "url": "jdbc:sqlserver://10.211.55.2;authentication=sqlPassword;databaseName=AdventureWorksLT2019_Dev;encrypt=true;integratedSecurity=false;trustServerCertificate=true"
     },
     "displayName": "AdvWorks_Dev"
+  },
+  "capabilities": {
+    "staticData": {
+      "configuredTables": [
+        {
+          "schema": "SalesLT",
+          "table": "Customer",
+          "excludedColumns": []
+        }
+      ]
+    }
   }
 }
