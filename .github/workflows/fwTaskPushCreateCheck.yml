@@ -105,6 +105,7 @@ jobs:
         staticCodeAnalysis: false #Currently not setup in this pipeline
         publishArtifacts: true
         GITHUB_TOKEN: ${{ github.token }}
+        BODY_FILE: ${{ GITHUB.WORKSPACE }}\reports\${{ env.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html
  
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
@@ -128,11 +129,11 @@ jobs:
           uses: actions/upload-artifact@v3
           with: 
             name: flyway-reports
-            path: ${{ GITHUB.WORKSPACE }}/reports/
+            path: ./reports/
         
         - name: create pull request
           run: |
-            gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action'
+            gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body-file ${{ env.BODY_FILE }}
             gh pr merge --auto --merge
             gh pr comment --body "Hi from GitHub actions"
 
