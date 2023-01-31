@@ -105,7 +105,9 @@ jobs:
         staticCodeAnalysis: false #Currently not setup in this pipeline
         publishArtifacts: true
         GITHUB_TOKEN: ${{ github.token }}
-        BODY_FILE: ${{ GITHUB.WORKSPACE }}\reports\${{ secrets.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html
+        REPORT_FILE: ${{ secrets.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html
+        REPORT_PATH: ${{ GITHUB.WORKSPACE }}\reports\
+        PUBLISH_PATH: https://mtpenguin.github.io/AdvWorksAuto/
  
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
@@ -116,7 +118,7 @@ jobs:
         - name: Create Check Reports
           if: env.generateDriftAndChangeReport == 'true'
           run: |
-            flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ GITHUB.WORKSPACE }}\reports\${{ env.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html"
+            flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ env.REPORT_PATH }}${{ env.REPORT_FILE }}"
           continue-on-error: false
  
         - name: Publish Check Report as Artifact
@@ -125,10 +127,16 @@ jobs:
           with: 
             name: flyway-reports
             path: ${{ GITHUB.WORKSPACE }}\reports
+
+        - name: Commit report
+          run: |
+            git add ${{ env.REPORT_PATH }}
+            git commit -am "Automated report"
+            git push
         
         - name: create pull request
           run: |
             gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action'
             gh pr merge --auto --merge
-            gh pr comment --body "Hi from GitHub actions"
+            gh pr comment --body "Report can be found here:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
 
