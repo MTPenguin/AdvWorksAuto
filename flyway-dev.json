@@ -25,7 +25,14 @@
         "displayName": "AdvWorks"
       }
     ],
-    "generateUndoScripts": true
+    "generateUndoScripts": true,
+    "shadowDatabase": {
+      "connectionProvider": {
+        "type": "UsernamePassword",
+        "url": "jdbc:sqlserver://10.211.55.2;authentication=sqlPassword;databaseName=AdventureWorksLT2019_Shadow;encrypt=true;integratedSecurity=false;trustServerCertificate=true"
+      },
+      "displayName": "AdvWorks_Shadow"
+    }
   },
   "developmentDatabase": {
     "connectionProvider": {
