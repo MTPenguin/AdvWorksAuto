@@ -129,7 +129,7 @@ jobs:
           uses: actions/upload-artifact@v3
           with: 
             name: flyway-reports
-            path: ./reports/
+            path: ${{ GITHUB.WORKSPACE }}\reports
         
         - name: create pull request
           run: |
