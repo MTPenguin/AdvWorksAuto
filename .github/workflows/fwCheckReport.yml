@@ -1,10 +1,11 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Deploy Flyway Check Report To Github Pages
 
 on:
   # Runs on pull_request targeting task** branch
   pull_request:
-    branches: ["task**"]
+    types: [opened]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
