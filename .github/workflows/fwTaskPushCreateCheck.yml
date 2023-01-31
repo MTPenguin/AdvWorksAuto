@@ -130,7 +130,7 @@ jobs:
 
         - name: Commit report
           run: |
-            git add ${{ REPORT_PATH }}
+            git add ${{ env.REPORT_PATH }}
             git commit -am "Automated report"
             git push
         
