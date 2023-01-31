@@ -125,6 +125,12 @@ jobs:
           with: 
             name: flyway-reports
             path: ${{ GITHUB.WORKSPACE }}\reports
+
+        - name: Commit report
+          run: |
+            git add .
+            git commit -am "Automated report"
+            git push
         
         - name: create pull request
           run: |

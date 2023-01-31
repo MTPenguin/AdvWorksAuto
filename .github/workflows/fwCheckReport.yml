@@ -2,7 +2,7 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pull_request targeting task** branch
   pull_request:
     branches: ["task**"]
 
