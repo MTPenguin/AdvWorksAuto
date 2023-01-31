@@ -87,7 +87,7 @@ jobs:
       runs-on: self-hosted
       environment: 'prod-check' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured
       if: ${{ true }} #Set this variable to false to temporarily disable the job
-      # needs: build
+      needs: build
       env:
         stage: 'Prod'
         branch_name: ${{ github.head_ref || github.ref_name }} 
