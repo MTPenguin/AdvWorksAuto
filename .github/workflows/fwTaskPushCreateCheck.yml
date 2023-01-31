@@ -105,7 +105,7 @@ jobs:
         staticCodeAnalysis: false #Currently not setup in this pipeline
         publishArtifacts: true
         GITHUB_TOKEN: ${{ github.token }}
-        BODY_FILE: ${{ GITHUB.WORKSPACE }}\reports\${{ secrets.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html
+        REPORT_FILE: ${{ GITHUB.WORKSPACE }}\reports\${{ secrets.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html
  
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
@@ -116,7 +116,7 @@ jobs:
         - name: Create Check Reports
           if: env.generateDriftAndChangeReport == 'true'
           run: |
-            flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ GITHUB.WORKSPACE }}\reports\${{ env.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html"
+            flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ env.REPORT_FILE }}"
           continue-on-error: false
  
         - name: Publish Check Report as Artifact
@@ -128,7 +128,8 @@ jobs:
 
         - name: Commit report
           run: |
-            git add .
+            cp ${{ env.REPORT_FILE }} reports\index.html
+            git add reports\index.html
             git commit -am "Automated report"
             git push
         
