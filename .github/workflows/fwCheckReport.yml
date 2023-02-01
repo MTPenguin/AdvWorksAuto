@@ -4,7 +4,6 @@ name: Deploy Flyway Check Report To Github Pages
 on:
   # Runs on pull_request targeting task** branch
   pull_request:
-    types: [opened]
     branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
