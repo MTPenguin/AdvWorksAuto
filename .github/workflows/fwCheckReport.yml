@@ -3,12 +3,7 @@ name: Deploy Flyway Check Report To Github Pages
 run-name: Deploy Flyway Check Report to Github Pages 
 
 on:
-  # Runs on pull_request targeting main branch
-  pull_request:
-    branches: ["main"]
-    types: [opened, reopened]
-
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows you to run this workflow manually from the Actions tab AND from other actions (fwTaskPushCreateCheck)
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages

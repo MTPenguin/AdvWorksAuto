@@ -134,9 +134,13 @@ jobs:
             git commit -am "Automated report"
             git push
         
-        - name: create pull request
+        - name: Create Pull Request
           run: |
             gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action'
             gh pr merge --auto --merge
             gh pr comment --body "Report can be found here:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
 
+        - name: Trigger Deploy
+          run: |
+            gh workflow run fwCheckReport.yml -r ${{ github.ref }} 
+       
