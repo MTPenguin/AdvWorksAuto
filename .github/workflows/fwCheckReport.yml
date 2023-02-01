@@ -1,6 +1,6 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy Flyway Check Report To Github Pages
-run-name: Deploy Flyway Check Report to Github Pages 
+run-name: Deploy ${{ inputs.report_file }}
 
 on:
   # Allows you to run this workflow manually from the Actions tab AND from other actions (fwTaskPushCreateCheck)
