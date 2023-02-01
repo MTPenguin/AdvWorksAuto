@@ -1,7 +1,7 @@
 # This is a workflow to check and create a pull request for db changes
  
 name: Flyway Task Create Check Pipeline (Self-Hosted)
- 
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for branches beginning with 'task' that have changes in the migrations folder.
