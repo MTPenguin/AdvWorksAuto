@@ -136,7 +136,7 @@ jobs:
         
         - name: Create Pull Request
           run: |
-            gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action.\n${{ github.event.head_commit.message }}'
+            gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action.'
             gh pr merge --auto --merge
 
         - name: Trigger Deploy
