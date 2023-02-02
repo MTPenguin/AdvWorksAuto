@@ -40,6 +40,12 @@ jobs:
         
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
-        if: ${{ true }}
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
+      
+      - name: Comment Pull Request On Error
+        if: (${{ failure() }})
+        env: 
+          GITHUB_TOKEN: ${{ github.token }} 
+        run: |
+          gh pr comment --body "FAILED DEPLOY!"
