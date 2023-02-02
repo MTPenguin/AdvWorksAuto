@@ -41,7 +41,7 @@ jobs:
 
       - name: Comment Pull Request Pre Deploy
         run: |
-          gh pr comment -R ${{ github.event.review.repository }} --body "PRE DEPLOY!"
+          gh pr comment -R ${{ github.event.repository }} --body "PRE DEPLOY!"
 
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
