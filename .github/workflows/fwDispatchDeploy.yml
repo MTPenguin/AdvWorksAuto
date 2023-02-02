@@ -20,7 +20,6 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   prod:
-    permissions: write-all
     name: Deploy Production
     # The type of runner that the job will run on
     runs-on: self-hosted
@@ -41,7 +40,7 @@ jobs:
 
       - name: Comment Pull Request Pre Deploy
         run: |
-          gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "PRE DEPLOY"
+          gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "Starting Flyway Migration"
 
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
@@ -51,4 +50,4 @@ jobs:
       - name: Comment Pull Request On Error
         if: (${{ failure() }})
         run: |
-          gh pr comment --body "FAILED DEPLOY!"
+          gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "FAILED DEPLOY!  See checks below for details"
