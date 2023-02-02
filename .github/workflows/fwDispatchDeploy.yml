@@ -9,9 +9,10 @@ on:
   pull_request_review:
     types: [submitted]
     branch: task**
-
+    
+  workflow_dispatch:
+  
 env:
- 
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
   # If the first undo script is U002, this will validate all undo scripts up to and including that
   FIRST_UNDO_SCRIPT: ${{ secrets.FIRST_UNDO_SCRIPT }}
@@ -21,6 +22,7 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   prod:
+    permissions: write-all
     name: Deploy Production
     # The type of runner that the job will run on
     runs-on: self-hosted
@@ -32,14 +34,23 @@ jobs:
       JDBC: ${{ secrets.JDBC }}
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
- 
+      GITHUB_TOKEN: ${{ github.token }} 
+        
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-        
+
+      - name: Comment Pull Request Pre Deploy
+        run: |
+          gh pr comment --body "PRE DEPLOY!"
+
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
-        if: ${{ true }}
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
+      
+      - name: Comment Pull Request On Error
+        if: (${{ failure() }})
+        run: |
+          gh pr comment --body "FAILED DEPLOY!"
