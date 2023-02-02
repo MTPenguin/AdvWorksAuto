@@ -9,7 +9,9 @@ on:
   pull_request_review:
     types: [submitted]
     branch: task**
-
+    
+  workflow_dispatch:
+  
 env:
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
   # If the first undo script is U002, this will validate all undo scripts up to and including that
