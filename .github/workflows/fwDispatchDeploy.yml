@@ -32,12 +32,17 @@ jobs:
       JDBC: ${{ secrets.JDBC }}
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
- 
+      GITHUB_TOKEN: ${{ github.token }} 
+        
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-        
+
+      - name: Comment Pull Request On Error
+        run: |
+          gh pr comment --body "PRE DEPLOY!"
+
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
         run: |
@@ -45,7 +50,5 @@ jobs:
       
       - name: Comment Pull Request On Error
         if: (${{ failure() }})
-        env: 
-          GITHUB_TOKEN: ${{ github.token }} 
         run: |
           gh pr comment --body "FAILED DEPLOY!"
