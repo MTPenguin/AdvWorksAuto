@@ -20,6 +20,7 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   prod:
+    permissions: write-all
     name: Deploy Production
     # The type of runner that the job will run on
     runs-on: self-hosted
@@ -38,7 +39,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Comment Pull Request On Error
+      - name: Comment Pull Request Pre Deploy
         run: |
           gh pr comment --body "PRE DEPLOY!"
 
