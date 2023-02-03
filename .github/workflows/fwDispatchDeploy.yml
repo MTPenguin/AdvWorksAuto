@@ -57,14 +57,9 @@ jobs:
           echo "B_LOG=BB" >> $env:GITHUB_OUTPUT
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false' 2>&1 | tee output.log
           
-      
-      - name: Test Echo
-        run: |
-          echo "B_LOG=${{ steps.fwMigrate.outputs.B_LOG }}"
-          echo "M_LOG=${{ steps.fwMigrate.outputs.M_LOG }}"
-
+      # Add output.log to PR comment
       - name: Comment Pull Request On Error
-        if: (${{ failure() }})
+        if: (${{ success() || failure() }})
         run: |
           echo "M_LOG=$(cat ./output.log)" >> $env:GITHUB_OUTPUT
           echo "${{ steps.fwMigrate.outputs.M_LOG }}"
