@@ -55,10 +55,14 @@ jobs:
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false' 2>&1 | tee output.log
           
+      # Set Output
+      - name: Get Output
+        id: fwLog
+        run: |
+          echo "LOG=$(cat ./output.log)" >> $env:GITHUB_OUTPUT
+
       # Add output.log to PR comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }}
       - name: Comment PR With Output
         if: (${{ success() }}  || ${{ failure() }})
-        env:
-          OUTPUT: $(cat ./output.log)
         run: |
-          gh pr comment --body "${{ env.OUTPUT }}"
+          gh pr comment --body "${{ steps.fwLog.outputs.LOG }}"
