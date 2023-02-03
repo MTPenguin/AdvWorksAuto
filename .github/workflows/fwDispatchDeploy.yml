@@ -53,14 +53,14 @@ jobs:
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false' 2> | tee ./error.log
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false' *>&1 | Tee-Object ./output.log
           
       # Set Output
       - name: Get Output
         if: (${{ failure() }})
         id: fwLog
         run: |
-          echo "STD_ERR=$(cat ./error.log)" >> $env:GITHUB_OUTPUT
+          echo "STD_ERR=$(cat ./output.log)" >> $env:GITHUB_OUTPUT
 
       # Debug Output
       - name: Debug Output
