@@ -28,8 +28,17 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     runs-on: self-hosted
     steps:
+      # Set Output
+      - name: Get Output
+        id: log
+        run: |
+          echo "LOG=$(gh run view --job ${{ inputs.run_id }} --log)" >> $env:GITHUB_OUTPUT
+      - name: Debug Log
+        run: |
+          echo ${{ steps.log.outputs.LOG }}
       - name: Comment Pull Request With Log
         run: |
-          gh pr comment --body "LOG COMMENT"
+          gh pr comment --body ${{ steps.log.outputs.LOG }}
+
 
       
