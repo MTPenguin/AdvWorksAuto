@@ -68,8 +68,8 @@ jobs:
         run: |
           echo "${{ steps.fwLog.outputs.LOG }}"
 
-      # Add output.log to PR comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }}
+      # Add Output To PR comment 
       - name: Comment PR With Output
         if: (${{ success() }}  || ${{ failure() }})
         run: |
-          gh pr comment --body-file ./output.log
+          gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body-file ./output.log
