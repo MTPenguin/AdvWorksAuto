@@ -64,6 +64,7 @@ jobs:
 
       # Debug Output
       - name: Debug Output
+        if: (${{ success() }}  || ${{ failure() }})
         run: |
           echo "${{ steps.fwLog.outputs.LOG }}"
 
