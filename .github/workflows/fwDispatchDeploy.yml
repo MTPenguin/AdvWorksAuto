@@ -46,12 +46,12 @@ jobs:
 
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
+        id: fwMigrate
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false' 2>&1 | tee output.log
-          echo "M_LOG=$(cat ./output.log)" >> $GITHUB_OUTPUT
-          echo "B_LOG=BB" >> $GITHUB_OUTPUT
-        id: fwMigrate
-        
+          echo "M_LOG=$(cat ./output.log)" >> $env:GITHUB_OUTPUT
+          echo "B_LOG=BB" >> $env:GITHUB_OUTPUT
+      
       - name: Comment Pull Request On Error
         if: (${{ failure() }})
         run: |
