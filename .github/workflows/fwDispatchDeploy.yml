@@ -52,5 +52,5 @@ jobs:
       - name: Comment Pull Request On Error
         if: (${{ failure() }})
         run: |
-          gh run view ${{ github.run_id }} --log -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} 
+          gh run view ${{ github.run_id }} --log
           gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "DEPLOY FAILED  See "
