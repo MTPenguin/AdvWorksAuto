@@ -72,4 +72,4 @@ jobs:
       - name: Comment PR With Output
         if: (${{ success() }}  || ${{ failure() }})
         run: |
-          gh pr comment --body "${{ steps.fwLog.outputs.LOG }}"
+          gh pr comment --body-file ./output.log
