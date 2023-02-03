@@ -61,5 +61,4 @@ jobs:
         env:
           OUTPUT: $(cat ./output.log)
         run: |
-          echo "${{ env.OUTPUT }}"
           gh pr comment --body "${{ env.OUTPUT }}"
