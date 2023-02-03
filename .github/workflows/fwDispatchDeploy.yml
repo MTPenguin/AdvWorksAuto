@@ -17,6 +17,12 @@ env:
   # Enable this for additional debug logging
   ACTIONS_RUNNER_DEBUG: true 
  
+# Allow one concurrent deployment
+concurrency:
+  group: "fwDeploy"
+  cancel-in-progress: true
+
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   prod:
@@ -52,6 +58,11 @@ jobs:
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false' 2>&1 | tee output.log
           echo "M_LOG=$(cat ./output.log)" >> $env:GITHUB_OUTPUT
       
+      - name: Test Echo
+        run: |
+          echo "B_LOG=${{ steps.fwMigrate.outputs.B_LOG }}"
+          echo "M_LOG=${{ steps.fwMigrate.outputs.M_LOG }}"
+
       - name: Comment Pull Request On Error
         if: (${{ failure() }})
         run: |
