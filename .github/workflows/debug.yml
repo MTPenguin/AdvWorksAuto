@@ -45,8 +45,8 @@ jobs:
           echo "test=${{ steps.echo.outputs.TEST }}"
           echo "test1=${{ steps.echo.outputs.TEST1 }}"
 
-      # - name: Comment Pull Request End
-      #   run: |
-      #     echo "test=${{ steps.echo.outputs.TEST }}"
-      #     gh pr comment --body "DEBUG END"- name: Comment Pull Request End
+      - name: Comment Pull Request End
+        run: |
+          echo "test=${{ steps.echo.outputs.TEST }}"
+          gh pr comment --body "DEBUG END"
       
