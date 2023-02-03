@@ -64,5 +64,6 @@ jobs:
 
       # Add output.log to PR comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }}
       - name: Comment PR With Output
+        if: (${{ success() }}  || ${{ failure() }})
         run: |
           gh pr comment --body "${{ steps.fwLog.outputs.LOG }}"
