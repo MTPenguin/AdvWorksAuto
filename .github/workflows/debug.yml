@@ -38,10 +38,12 @@ jobs:
         run: |
           echo "Test" > output.txt
           echo "TEST=test" >> $env:GITHUB_OUTPUT
+          echo "TEST1=$(cat output.txt)" >> $env:GITHUB_OUTPUT
       
       - name: Test Echo
         run: |
           echo "test=${{ steps.echo.outputs.TEST }}"
+          echo "test1=${{ steps.echo.outputs.TEST1 }}"
 
       # - name: Comment Pull Request End
       #   run: |
