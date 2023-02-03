@@ -12,6 +12,7 @@ permissions:
   contents: read
   pull-requests: write
   id-token: write
+  actions: write
 
 # Allow one concurrent deployment
 concurrency:
@@ -45,8 +46,14 @@ jobs:
           echo "test=${{ steps.echo.outputs.TEST }}"
           echo "test1=${{ steps.echo.outputs.TEST1 }}"
 
-      - name: Comment Pull Request End
+      # - name: Comment Pull Request End
+      #   run: |
+      #     echo "test=${{ steps.echo.outputs.TEST }}"
+      #     gh pr comment --body "DEBUG END"- name: Comment Pull Request End
+
+      - name: Trigger Comment
         run: |
-          echo "test=${{ steps.echo.outputs.TEST }}"
-          gh pr comment --body "DEBUG END"
+          gh workflow run commentLog.yml -r ${{ github.ref }} -f run_id="${{ github.run_id }}"
+       
+
       

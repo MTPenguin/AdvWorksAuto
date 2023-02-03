@@ -1,0 +1,35 @@
+# Simple workflow for putting runner logs in PR comments
+name: Comment Runner Log
+run-name: Comment Runner Log
+
+on:
+  # Allows you to run this workflow manually from the Actions tab AND from other actions (fwTaskPushCreateCheck)
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Run ID
+        required: true
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "commentLog"
+  cancel-in-progress: true
+
+jobs:
+  comment:
+    env:
+      ACTIONS_RUNNER_DEBUG: true 
+      GH_TOKEN: ${{ github.token }}
+    runs-on: self-hosted
+    steps:
+      - name: Comment Pull Request With Log
+        run: |
+          gh pr comment --body "LOG COMMENT"
+
+      
