@@ -1,6 +1,6 @@
 # Simple workflow for debugging github actions
 name: DEBUG
-run-name: DEBUG
+run-name: DEBUG ${{ github.ref }}
 
 on:
   # Allows you to run this workflow manually from the Actions tab AND from other actions (fwTaskPushCreateCheck)
@@ -28,9 +28,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # - name: Comment Pull Request Start
-      #   run: |
-      #     gh pr comment --body "DEBUG START"
+      - name: Comment Pull Request Start
+        run: |
+          gh pr comment --body "DEBUG START"
 
       # Test output
       - name: Echo Commands
