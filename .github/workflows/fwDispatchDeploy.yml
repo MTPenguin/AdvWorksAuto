@@ -57,7 +57,7 @@ jobs:
           
       # Add output.log to PR comment
       - name: Comment Pull Request On Error
-        if: (${{ success() || failure() }})
+        if: (${{ success() }}  || ${{ failure() }})
         env:
           OUTPUT: $(cat ./output.log)
         run: |
