@@ -53,20 +53,22 @@ jobs:
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false' | tee ./output.log
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false' > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
           
       # Set Output
       - name: Get Output
         if: (${{ success() }}  || ${{ failure() }})
         id: fwLog
         run: |
-          echo "LOG=$(cat ./output.log)" >> $env:GITHUB_OUTPUT
+          echo "STD_OUT=$(cat ./stdout.log)" >> $env:GITHUB_OUTPUT
+          echo "STD_ERR=$(cat ./stderr.log)" >> $env:GITHUB_OUTPUT
 
       # Debug Output
       - name: Debug Output
         if: (${{ success() }}  || ${{ failure() }})
         run: |
-          echo "${{ steps.fwLog.outputs.LOG }}"
+          echo "${{ steps.fwLog.outputs.STD_OUT }}"
+          echo "${{ steps.fwLog.outputs.STD_ERR }}"
 
       # # Add Output To PR comment 
       # - name: Comment PR With Output
