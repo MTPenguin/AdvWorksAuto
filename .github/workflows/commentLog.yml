@@ -44,7 +44,7 @@ jobs:
       #     gh pr comment --body "${{ steps.log.outputs.LOG || 'none' }}"
       - name: Comment Pull Request With Log
         run: |
-          gh pr comment --body-text output.log
+          gh pr comment --body-file output.log
       
 
 
