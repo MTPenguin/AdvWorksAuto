@@ -38,7 +38,7 @@ jobs:
           echo ${{ steps.log.outputs.LOG }}
       - name: Comment Pull Request With Log
         run: |
-          gh pr comment --body ${{ steps.log.outputs.LOG }}
+          gh pr comment --body ${{ steps.log.outputs.LOG || 'none'}}
 
 
       
