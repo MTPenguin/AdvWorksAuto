@@ -35,7 +35,7 @@ jobs:
           echo "LOG=$(gh run view ${{ inputs.run_id }} --log-failed)" >> $env:GITHUB_OUTPUT
       - name: Debug Log
         run: |
-          echo ${{ steps.log.outputs.LOG }}
+          echo ${{ steps.log.outputs.LOG || 'none'}}
       - name: Comment Pull Request With Log
         run: |
           gh pr comment --body ${{ steps.log.outputs.LOG || 'none'}}
