@@ -32,7 +32,7 @@ jobs:
       - name: Get Output
         id: log
         run: |
-          echo "LOG=$(gh run view ${{ inputs.run_id }} --log-failed)" >> $env:GITHUB_OUTPUT
+          echo "LOG=$(gh run view ${{ inputs.run_id }} --log)" >> $env:GITHUB_OUTPUT
       - name: Debug Log
         run: |
           echo ${{ steps.log.outputs.LOG || 'none'}}
