@@ -29,16 +29,23 @@ jobs:
     runs-on: self-hosted
     steps:
       # Set Output
-      - name: Get Output
-        id: log
+      # - name: Get Output
+      #   id: log
+      #   run: |
+      #     echo "LOG=$(gh run view ${{ inputs.run_id }} --log -v)" >> $env:GITHUB_OUTPUT
+      - name: Log File
         run: |
-          echo "LOG=$(gh run view ${{ inputs.run_id }} --log -v)" >> $env:GITHUB_OUTPUT
-      - name: Debug Log
-        run: |
-          echo ${{ steps.log.outputs.LOG || 'none'}}
+          gh run view ${{ inputs.run_id }} --log > output.log
+      # - name: Debug Log
+      #   run: |
+      #     echo ${{ steps.log.outputs.LOG || 'none'}}
+      # - name: Comment Pull Request With Log
+      #   run: |
+      #     gh pr comment --body "${{ steps.log.outputs.LOG || 'none' }}"
       - name: Comment Pull Request With Log
         run: |
-          gh pr comment --body "${{ steps.log.outputs.LOG || 'none'}}"
+          gh pr comment --body-text output.log
+      
 
 
       
