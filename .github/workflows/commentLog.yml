@@ -29,6 +29,7 @@ jobs:
     runs-on: self-hosted
     steps:
       # Set Output
+      
       # - name: Get Output
       #   id: log
       #   run: |
@@ -39,7 +40,7 @@ jobs:
       # - name: Comment Pull Request With Log
       #   run: |
       #     gh pr comment --body "${{ toJSON(steps.log.outputs.LOG || 'none' ) }}"
-      - name: Log File
+      - name: Log To File
         run: |
           gh run view ${{ inputs.run_id }} --log > output.log
       - name: Remove control characters

@@ -53,24 +53,16 @@ jobs:
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false' 2> >(Tee-Object ./output.log)
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
           
       # Set Output
-      - name: Get Output
-        if: (${{ failure() }})
-        id: fwLog
+      - name: Log To File
         run: |
-          echo "STD_ERR=$(cat ./output.log)" >> $env:GITHUB_OUTPUT
-
-      # Debug Output
-      - name: Debug Output
-        if: (${{ success() }}  || ${{ failure() }})
+          gh run view ${{ inputs.run_id }} --log > output.log
+      - name: Remove control characters
         run: |
-          echo "${{ steps.fwLog.outputs.STD_OUT }}"
-          echo "${{ steps.fwLog.outputs.STD_ERR }}"
-
-      # # Add Output To PR comment 
-      # - name: Comment PR With Output
-      #   if: (${{ success() }}  || ${{ failure() }})
-      #   run: |
-      #     gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body-file ./output.log
+          get-content output.log -Encoding UTF8 | Set-Content outputUTF8.log
+      - name: Comment Pull Request With Log
+        run: |
+          gh pr comment --body-file outputUTF8.log
+      
