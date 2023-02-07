@@ -52,16 +52,22 @@ jobs:
 
       - name: Comment Pull Request Pre Deploy
         run: |
-          gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "Starting Flyway Migration"
+          gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "Starting Flyway Migration Of ${{ github.event.pull_request.head.ref }}"
 
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
           
-      # Trigger Log Workflow
+      # Trigger Log Workflow On Failure
       - name: Trigger Run Log Comment On Pull Request
-        if: ( ${{ success() }} || ${{ failure() }} )
+        if: ${{ failure() }}
         run: |
           gh workflow run commentLog.yml -r ${{ github.event.pull_request.head.ref }} -f run_id="${{ github.run_id }}" -f repo_name="${{ github.event.repository.full_name }}" -f branch_name="${{ github.event.pull_request.head.ref }}"
       
+      - name: Comment Pull Request Pre Deploy
+        if: ${{ success() }}
+        run: |
+          gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "${{ github.event.pull_request.head.ref }} Successfully Migrated"
+
+        
