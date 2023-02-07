@@ -63,5 +63,5 @@ jobs:
       - name: Trigger Run Log Comment On Pull Request
         if: ( ${{ success() }} || ${{ failure() }} )
         run: |
-          gh workflow run commentLog.yml -r (${{ github.head_ref || github.ref_name }}) -f run_id="${{ github.run_id }}"
+          gh workflow run commentLog.yml -r ${{ github.head_ref || github.ref_name }} -f run_id="${{ github.run_id }}"
       
