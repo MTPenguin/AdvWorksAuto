@@ -1,7 +1,7 @@
 # This is a basic workflow to help you get started with Actions
  
 name: Flyway Dispatch Deploy Pipeline (Self-Hosted)
-run-name: Deploy ${{ github.event.pull_request.head.ref }} merge/migration to ${{ github.event.pull_request.base.ref }}
+run-name: Deploy ${{ github.event.pull_request.head.ref }} merge/migration to ${{ github.event.repository.full_name }}/${{ github.event.pull_request.base.ref }}
 
 # Controls when the workflow will run
 on:
@@ -65,7 +65,7 @@ jobs:
         run: |
           gh workflow run commentLog.yml -r ${{ github.event.pull_request.head.ref }} -f run_id="${{ github.run_id }}" -f repo_name="${{ github.event.repository.full_name }}" -f branch_name="${{ github.event.pull_request.head.ref }}"
       
-      - name: Comment Pull Request Pre Deploy
+      - name: Comment Pull Request Post Deploy
         if: ${{ success() }}
         run: |
           gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "${{ github.event.pull_request.head.ref }} Successfully Migrated"
