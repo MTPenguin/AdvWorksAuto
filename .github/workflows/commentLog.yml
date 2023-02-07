@@ -19,6 +19,9 @@ on:
         description: "Only Failed Logs"
         type: boolean
         default: true
+      line_limit:
+        description: "Max Report Lines"
+        default: "50"
       
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -64,7 +67,7 @@ jobs:
           gh run view ${{ inputs.run_id }} --log-failed > output.log
       - name: Remove control characters
         run: |
-          Get-Content output.log -Encoding UTF8 | Set-Content outputUTF8.log
+          Get-Content output.log -Encoding UTF8 -Tail "${{ inputs.line_limit }}" | Set-Content outputUTF8.log
       - name: Comment Pull Request With Log
         run: |
           gh pr comment -R ${{ inputs.repo_name }} ${{ inputs.branch_name }} --body-file outputUTF8.log
