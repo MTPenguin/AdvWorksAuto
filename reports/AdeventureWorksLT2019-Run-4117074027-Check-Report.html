@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8">
+<style>
+pre {
+    counter-reset: line;
+    font-size: large;
+}
+code {
+    counter-increment: line;
+}
+code:before {
+    content: counter(line);
+    color: #808080;
+    margin-right: 10px;
+    margin-left: 5px;
+    font-size: 14px;
+    -webkit-user-select: none;
+}
+.added {
+    background-color: #45EA85
+}
+.keyword {
+    color: #0000ff;
+}
+.comment {
+    color: #808080;
+}
+.after {
+    background-color: #E6FFEc;
+}
+.before {
+    background-color: #FFEBE9;
+}
+.textInsert {
+   background-color: #ABF2BC
+}
+.textDelete {
+   background-color: #FF818266
+}
+.tabs {
+   overflow: hidden;
+   margin: 0 100px 30px 0;
+   border-bottom: 1px solid #BBBBBB;
+}
+.tabs button {
+   background-color: transparent;
+   border: none;
+   cursor: pointer;
+   padding: 0px 40px;
+   max-width: 200px;
+}
+.tabs button:hover, .tabs button.active {
+   border-bottom: 2px solid #CC0000;
+}
+.tabcontent, .page {
+    display: none;
+}
+.dropdown>select {
+    padding: 8px 12px;
+}
+summary {
+   display: inline;
+   list-style-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBjbGFzcz0idy02IGgtNiI+DQogIDxwYXRoIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTguMjUgNC41bDcuNSA3LjUtNy41IDcuNSIgLz4NCjwvc3ZnPg0K);
+}
+summary>h3, summary>h4 {
+   display: list-item;
+   list-style-position: inside;
+}
+details[open]>summary {
+    list-style-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBjbGFzcz0idy02IGgtNiI+DQogIDxwYXRoIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTE5LjUgOC4yNWwtNy41IDcuNS03LjUtNy41IiAvPg0KPC9zdmc+DQo=);
+}
+h3::marker {
+   font-size: 30px;
+}
+h4::marker {
+   font-size: 24px;
+}
+details {
+   border: 2px solid #F2F2F2;
+   border-radius: 5px;
+   padding: 0 6px;
+   margin-top: 10px;
+}
+details>details {
+    background-color: #F2F2F2;
+    padding: 0 4px 4px 6px;
+    margin: 0 10px 10px 0;
+}
+</style>
+</head>
+<body style="font-family: sans-serif">
+<div style="margin: 30px;">
+<div style="float: right">
+<a href="https://flywaydb.org/" target="_newtab"><img src="" width=72 height=72/></a>
+</div>
+<div class="dropdown" style="float: right; clear: both; margin-top: 50px">
+<label for="dropdown">Report generated:</label>
+<select onchange="onTimestampClick(event, this.value)" id="dropdown">
+<option value="2023-02-07 11:32:17" selected="true">2023-02-07 11:32:17</option>
+</select>
+</div>
+<div class="page 2023-02-07 11:32:17">
+<div class="tabs">
+<button class="tab" onclick="onTabClick(event, 'Changereport2023-02-0711:32:17')"><h4>Change report</h4></button>
+<button class="tab" onclick="onTabClick(event, 'Driftreport2023-02-0711:32:17')"><h4>Drift report</h4></button>
+<button class="tab" onclick="onTabClick(event, 'Dryrun2023-02-0711:32:17')" id="open-2023-02-07 11:32:17"><h4>Dry run</h4></button>
+</div><div id="Changereport2023-02-0711:32:17" class="tabcontent">
+<div style="display: flex; justify-content: left;">
+<h1>Change report&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: normal; font-size: 16px">Database: AdventureWorksLT2019</span></h1>
+</div>
+<div style="background-color: rgb(240 240 240); padding: 20px; border-radius: 5px; color: black; display: flex; justify-content: space-between; clear: both; margin-top: 20px;">
+<div>Added<span style="background-color: white; padding: 4px 12px; margin-left: 12px; border-radius: 14px; color: black">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deleted<span style="background-color: white; padding: 4px 12px; margin-left: 12px; border-radius: 14px; color: black">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Modified<span style="background-color: #FFD699; padding: 4px 12px; margin-left: 12px; border-radius: 14px; color: #7E4801">1</span></div><div><img style="vertical-align: top; margin-right: 6px" width=16 height=16 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAmCAYAAACoPemuAAACyElEQVRYhe2YT1IaQRSHf68bsw1HGE+QMWSXitoniJ7AZJdKUTo3EE4QiJSVpTmBeIIBszRq3yDjDSZrfP2yCJARGmRmQFzk23VXz6uvXs/rf8AzhZYVKPwUB9m2/WaSMvEKiYVRXAVjT0PvCMkuCQXegSQWQpaFL2zHdFcmFkZxVbnKEYlEAKp5vgWQAOjxgJuLZHNhsdeHP44LCk0hRI2br++apcTCKA4qrnIuImFZoQkSHrCZlb25YuHnONRax1hClmaQKOb9q1NjFxZ7AqkRqWI2k3JesTCKA+10DIG/2pZPygPeyk6r8o0qJCXS3hhsbCrWWyQy98f2UNUv1Hm2Yypjw+pr5Ax8dn2y/THbUav3z0B0kCeIiDRvOjsNYCJjYRQHBaRAQt89vbkWVAAgoqMwiqtTYpr1cd5gAOCcTE27UKGiqap7FQETU1k7vPxV6IcnsaycsS2TAn93CO30bcHiSVnz5lisVr/cA+F83hePkIjId6XppTh8QIllhoRN5V8L70tIAUBARMfiSkYBIKQPKplWCJIy0SIh+Q0AcKiSwpcSbruZjJXbC52o7m3n7R0wXKBZlxEL1ChQGalV4F35nwP/xfKiAMC2yl0cVsE4Y0J4NnJEZMdi5KS/TpksImIzGaPeOmUeILgYiznNXQDpGnVGJNed7e5YzLZMKiLtdRoN6QETy4WruBbWnDUecBPwHa3r/QYR5T4wCsmDqp75bDAHEmn+HB6tvbek2mH/FkLLvuA+RnJ9sr05anhXflZuH087pQkP2GQ7vGK2ZRLFbPA0cikz708+FczcK69OjVXMBqvdEVJmNtbzRDB3E786NZbVauSIyPKAt3xSQI5nqDf1fkMKVKuHlETao+qbRd6Hu0DfqwYU7RS4mqUk0r6vuNbomrc0sSy1+uUeIHtCFBLwyjdGgDsS9ITQc5q7iwiN+AOQ/zVlelSVVQAAAABJRU5ErkJggg==" /> You can read more about the check command and other available report types <a href="https://flywaydb.org/documentation/command/check">here</a>.
+</div>
+</div>
+<details open>
+<summary><h3>Objects modified</h3></summary>
+<details style="margin-left: 20px">
+<summary><h4 style="margin: 0">Customer <span style="background-color: grey; color: white; font-weight: normal; font-size: 0.7em; padding: 2px 5px 2px 5px; border-radius: 5px; font-weight: bold; vertical-align: middle;">Table</span></h4></summary>
+<div style="display: flex; justify-content: space-around;">
+<p>Before</p>
+<p>After</p>
+</div>
+<div style="display: flex">
+<div style="width: 50%; overflow: auto;" class="before"><pre><code><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> [SalesLT].[Customer]</code>
+<code>(</code>
+<code>[CustomerID] [int] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">IDENTITY</span>(1, 1),</code>
+<code>[NameStyle] [dbo].[NameStyle] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_NameStyle] <span class="keyword">DEFAULT</span> ((0)),</code>
+<code>[Title] [nvarchar] (8) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[FirstName] [dbo].[Name] <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[MiddleName] [dbo].[Name] <span class="keyword">NULL</span>,</code>
+<code>[LastName] [dbo].[Name] <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[Suffix] [nvarchar] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[CompanyName] [nvarchar] (128) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[SalesPerson] [nvarchar] (256) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[EmailAddress] [nvarchar] (50) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[Phone] [dbo].[Phone] <span class="keyword">NULL</span>,</code>
+<code>[PasswordHash] [varchar] (128) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[PasswordSalt] [<span class="textDelete">var</span>char] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS<span class="textDelete"> <span class="keyword">NOT</span></span> <span class="keyword">NULL</span>,</code>
+<code>[rowguid] [uniqueidentifier] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">ROWGUIDCOL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_rowguid] <span class="keyword">DEFAULT</span> (newid()),</code>
+<code>[ModifiedDate] [datetime] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_ModifiedDate] <span class="keyword">DEFAULT</span> (getdate()),</code>
+<code>[New] [nchar] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span></code>
+<code>)</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> [SalesLT].[Customer] <span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> [PK_Customer_CustomerID] <span class="keyword">PRIMARY</span> <span class="keyword">KEY</span> <span class="keyword">CLUSTERED</span> ([CustomerID])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">CREATE</span> <span class="keyword">NONCLUSTERED</span> <span class="keyword">INDEX</span> [IX_Customer_EmailAddress] <span class="keyword">ON</span> [SalesLT].[Customer] ([EmailAddress])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> [SalesLT].[Customer] <span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> [AK_Customer_rowguid] <span class="keyword">UNIQUE</span> <span class="keyword">NONCLUSTERED</span> ([rowguid])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Customer information.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', <span class="keyword">NULL</span>, <span class="keyword">NULL</span></code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'The customer''s organization.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'CompanyName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Primary key for Customer records.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'CustomerID'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">E</span>-mail address for the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'EmailAddress'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'First name of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'FirstName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Last name of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'LastName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Middle name or middle initial of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'MiddleName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Date and time the record was last updated.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'ModifiedDate'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'0 = The data in FirstName and LastName are stored in western style (first name, last name) order.  1 = Eastern style (last name, first name) order.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'NameStyle'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Password for the e-mail account.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'PasswordH<span class="textDelete">ash'</span></code>
+<code><span class="textDelete"><span class="keyword">GO</span></span></code>
+<code><span class="textDelete"><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Random value concatenated with the password string before the password is h</span>ash<span class="textDelete">ed.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span></span>'<span class="textDelete">PasswordSalt'</span></code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Phone number associated with the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Phone'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">ROWGUIDCOL</span> number uniquely identifying the record. Used to support a merge replication sample.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'The customer''s sales person, an employee of AdventureWorks Cycles.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'SalesPerson'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Surname suffix. For example, Sr. or Jr.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Suffix'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">A</span> courtesy title. For example, Mr. or Ms.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Title'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Unique nonclustered constraint. Used to support replication samples.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'AK_Customer_rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of <span class="keyword">GETDATE</span>()', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_ModifiedDate'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of 0', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_NameStyle'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of <span class="keyword">NEWID</span>()', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Primary key (clustered) constraint', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'PK_Customer_CustomerID'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Nonclustered index.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">INDEX</span>', <span class="keyword">N</span>'IX_Customer_EmailAddress'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Clustered index created by a primary key constraint.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">INDEX</span>', <span class="keyword">N</span>'PK_Customer_CustomerID'</code>
+<code><span class="keyword">GO</span></code></pre></div>
+<div style="width: 50%; overflow: auto;" class="after"><pre><code><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> [SalesLT].[Customer]</code>
+<code>(</code>
+<code>[CustomerID] [int] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">IDENTITY</span>(1, 1),</code>
+<code>[NameStyle] [dbo].[NameStyle] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_NameStyle] <span class="keyword">DEFAULT</span> ((0)),</code>
+<code>[Title] [nvarchar] (8) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[FirstName] [dbo].[Name] <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[MiddleName] [dbo].[Name] <span class="keyword">NULL</span>,</code>
+<code>[LastName] [dbo].[Name] <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[Suffix] [nvarchar] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[CompanyName] [nvarchar] (128) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[SalesPerson] [nvarchar] (256) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[EmailAddress] [nvarchar] (50) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[Phone] [dbo].[Phone] <span class="keyword">NULL</span>,</code>
+<code>[PasswordHash] [varchar] (128) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[PasswordSalt] [<span class="textInsert">n</span>char] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[rowguid] [uniqueidentifier] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">ROWGUIDCOL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_rowguid] <span class="keyword">DEFAULT</span> (newid()),</code>
+<code>[ModifiedDate] [datetime] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_ModifiedDate] <span class="keyword">DEFAULT</span> (getdate()),</code>
+<code>[New] [nchar] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span></code>
+<code>)</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> [SalesLT].[Customer] <span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> [PK_Customer_CustomerID] <span class="keyword">PRIMARY</span> <span class="keyword">KEY</span> <span class="keyword">CLUSTERED</span> ([CustomerID])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">CREATE</span> <span class="keyword">NONCLUSTERED</span> <span class="keyword">INDEX</span> [IX_Customer_EmailAddress] <span class="keyword">ON</span> [SalesLT].[Customer] ([EmailAddress])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> [SalesLT].[Customer] <span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> [AK_Customer_rowguid] <span class="keyword">UNIQUE</span> <span class="keyword">NONCLUSTERED</span> ([rowguid])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Customer information.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', <span class="keyword">NULL</span>, <span class="keyword">NULL</span></code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'The customer''s organization.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'CompanyName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Primary key for Customer records.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'CustomerID'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">E</span>-mail address for the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'EmailAddress'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'First name of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'FirstName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Last name of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'LastName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Middle name or middle initial of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'MiddleName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Date and time the record was last updated.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'ModifiedDate'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'0 = The data in FirstName and LastName are stored in western style (first name, last name) order.  1 = Eastern style (last name, first name) order.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'NameStyle'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Password for the e-mail account.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'PasswordHash'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Phone number associated with the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Phone'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">ROWGUIDCOL</span> number uniquely identifying the record. Used to support a merge replication sample.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'The customer''s sales person, an employee of AdventureWorks Cycles.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'SalesPerson'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Surname suffix. For example, Sr. or Jr.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Suffix'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">A</span> courtesy title. For example, Mr. or Ms.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Title'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Unique nonclustered constraint. Used to support replication samples.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'AK_Customer_rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of <span class="keyword">GETDATE</span>()', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_ModifiedDate'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of 0', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_NameStyle'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of <span class="keyword">NEWID</span>()', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Primary key (clustered) constraint', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'PK_Customer_CustomerID'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Nonclustered index.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">INDEX</span>', <span class="keyword">N</span>'IX_Customer_EmailAddress'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Clustered index created by a primary key constraint.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">INDEX</span>', <span class="keyword">N</span>'PK_Customer_CustomerID'</code>
+<code><span class="keyword">GO</span></code></pre></div>
+</div></details></details>
+</div>
+<div id="Driftreport2023-02-0711:32:17" class="tabcontent">
+<div style="display: flex; justify-content: left;">
+<h1>Drift report&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: normal; font-size: 16px">Database: AdventureWorksLT2019</span></h1>
+</div>
+<div style="background-color: rgb(240 240 240); padding: 20px; border-radius: 5px; color: black; display: flex; justify-content: space-between; clear: both; margin-top: 20px;">
+<div>Added<span style="background-color: white; padding: 4px 12px; margin-left: 12px; border-radius: 14px; color: black">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deleted<span style="background-color: white; padding: 4px 12px; margin-left: 12px; border-radius: 14px; color: black">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Modified<span style="background-color: #FFD699; padding: 4px 12px; margin-left: 12px; border-radius: 14px; color: #7E4801">1</span></div><div><img style="vertical-align: top; margin-right: 6px" width=16 height=16 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAmCAYAAACoPemuAAACyElEQVRYhe2YT1IaQRSHf68bsw1HGE+QMWSXitoniJ7AZJdKUTo3EE4QiJSVpTmBeIIBszRq3yDjDSZrfP2yCJARGmRmQFzk23VXz6uvXs/rf8AzhZYVKPwUB9m2/WaSMvEKiYVRXAVjT0PvCMkuCQXegSQWQpaFL2zHdFcmFkZxVbnKEYlEAKp5vgWQAOjxgJuLZHNhsdeHP44LCk0hRI2br++apcTCKA4qrnIuImFZoQkSHrCZlb25YuHnONRax1hClmaQKOb9q1NjFxZ7AqkRqWI2k3JesTCKA+10DIG/2pZPygPeyk6r8o0qJCXS3hhsbCrWWyQy98f2UNUv1Hm2Yypjw+pr5Ax8dn2y/THbUav3z0B0kCeIiDRvOjsNYCJjYRQHBaRAQt89vbkWVAAgoqMwiqtTYpr1cd5gAOCcTE27UKGiqap7FQETU1k7vPxV6IcnsaycsS2TAn93CO30bcHiSVnz5lisVr/cA+F83hePkIjId6XppTh8QIllhoRN5V8L70tIAUBARMfiSkYBIKQPKplWCJIy0SIh+Q0AcKiSwpcSbruZjJXbC52o7m3n7R0wXKBZlxEL1ChQGalV4F35nwP/xfKiAMC2yl0cVsE4Y0J4NnJEZMdi5KS/TpksImIzGaPeOmUeILgYiznNXQDpGnVGJNed7e5YzLZMKiLtdRoN6QETy4WruBbWnDUecBPwHa3r/QYR5T4wCsmDqp75bDAHEmn+HB6tvbek2mH/FkLLvuA+RnJ9sr05anhXflZuH087pQkP2GQ7vGK2ZRLFbPA0cikz708+FczcK69OjVXMBqvdEVJmNtbzRDB3E786NZbVauSIyPKAt3xSQI5nqDf1fkMKVKuHlETao+qbRd6Hu0DfqwYU7RS4mqUk0r6vuNbomrc0sSy1+uUeIHtCFBLwyjdGgDsS9ITQc5q7iwiN+AOQ/zVlelSVVQAAAABJRU5ErkJggg==" /> You can read more about the check command and other available report types <a href="https://flywaydb.org/documentation/command/check">here</a>.
+</div>
+</div>
+<details open>
+<summary><h3>Objects modified</h3></summary>
+<details style="margin-left: 20px">
+<summary><h4 style="margin: 0">Customer <span style="background-color: grey; color: white; font-weight: normal; font-size: 0.7em; padding: 2px 5px 2px 5px; border-radius: 5px; font-weight: bold; vertical-align: middle;">Table</span></h4></summary>
+<div style="display: flex; justify-content: space-around;">
+<p>Before</p>
+<p>After</p>
+</div>
+<div style="display: flex">
+<div style="width: 50%; overflow: auto;" class="before"><pre><code><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> [SalesLT].[Customer]</code>
+<code>(</code>
+<code>[CustomerID] [int] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">IDENTITY</span>(1, 1),</code>
+<code>[NameStyle] [dbo].[NameStyle] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_NameStyle] <span class="keyword">DEFAULT</span> ((0)),</code>
+<code>[Title] [nvarchar] (8) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[FirstName] [dbo].[Name] <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[MiddleName] [dbo].[Name] <span class="keyword">NULL</span>,</code>
+<code>[LastName] [dbo].[Name] <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[Suffix] [nvarchar] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[CompanyName] [nvarchar] (128) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[SalesPerson] [nvarchar] (256) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[EmailAddress] [nvarchar] (50) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[Phone] [dbo].[Ph<span class="textDelete">one] <span class="keyword">NULL</span>,</span></code>
+<code><span class="textDelete">[Passw</span>o<span class="textDelete">rdHash] [varchar] (128) <span class="keyword">COLLATE</span> SQL_Latin1_Ge</span>ne<span class="textDelete">ral_CP1_CI_AS <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span></code>
+<code><span class="textDelete">[PasswordSalt</span>]<span class="textDelete"> [varchar] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NOT</span></span> <span class="keyword">NULL</span>,</code>
+<code>[rowguid] [uniqueidentifier] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">ROWGUIDCOL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_rowguid] <span class="keyword">DEFAULT</span> (newid()),</code>
+<code>[ModifiedDate] [datetime] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_ModifiedDate] <span class="keyword">DEFAULT</span> (getdate()),</code>
+<code>[New] [nchar] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span></code>
+<code>)</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> [SalesLT].[Customer] <span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> [PK_Customer_CustomerID] <span class="keyword">PRIMARY</span> <span class="keyword">KEY</span> <span class="keyword">CLUSTERED</span> ([CustomerID])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">CREATE</span> <span class="keyword">NONCLUSTERED</span> <span class="keyword">INDEX</span> [IX_Customer_EmailAddress] <span class="keyword">ON</span> [SalesLT].[Customer] ([EmailAddress])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> [SalesLT].[Customer] <span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> [AK_Customer_rowguid] <span class="keyword">UNIQUE</span> <span class="keyword">NONCLUSTERED</span> ([rowguid])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Customer information.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', <span class="keyword">NULL</span>, <span class="keyword">NULL</span></code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'The customer''s organization.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'CompanyName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Primary key for Customer records.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'CustomerID'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">E</span>-mail address for the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'EmailAddress'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'First name of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'FirstName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Last name of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'LastName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Middle name or middle initial of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'MiddleName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Date and time the record was last updated.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'ModifiedDate'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'0 = The data in FirstName and LastName are stored in western style (first name, last name) order.  1 = Eastern style (last name, first name) order.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Nam<span class="textDelete">eStyle'</span></code>
+<code><span class="textDelete"><span class="keyword">GO</span></span></code>
+<code><span class="textDelete"><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Password for the </span>e<span class="textDelete">-mail account.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'</span><span class="keyword">S</span><span class="textDelete">alesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'PasswordHash'</span></code>
+<code><span class="textDelete"><span class="keyword">GO</span></span></code>
+<code><span class="textDelete"><span class="keyword">EXEC</span> sp_addextendedproper</span>ty<span class="textDelete"> <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Random value concatenated with the password string before the password is hashed.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'Sa</span>l<span class="textDelete">esLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Custom</span>e<span class="textDelete">r', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'PasswordSalt</span>'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Phone number associated with the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Phone'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">ROWGUIDCOL</span> number uniquely identifying the record. Used to support a merge replication sample.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'The customer''s sales person, an employee of AdventureWorks Cycles.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'SalesPerson'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Surname suffix. For example, Sr. or Jr.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Suffix'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">A</span> courtesy title. For example, Mr. or Ms.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Title'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Unique nonclustered constraint. Used to support replication samples.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'AK_Customer_rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of <span class="keyword">GETDATE</span>()', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_ModifiedDate'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of 0', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_NameStyle'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of <span class="keyword">NEWID</span>()', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Primary key (clustered) constraint', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'PK_Customer_CustomerID'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Nonclustered index.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">INDEX</span>', <span class="keyword">N</span>'IX_Customer_EmailAddress'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Clustered index created by a primary key constraint.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">INDEX</span>', <span class="keyword">N</span>'PK_Customer_CustomerID'</code>
+<code><span class="keyword">GO</span></code></pre></div>
+<div style="width: 50%; overflow: auto;" class="after"><pre><code><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> [SalesLT].[Customer]</code>
+<code>(</code>
+<code>[CustomerID] [int] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">IDENTITY</span>(1, 1),</code>
+<code>[NameStyle] [dbo].[NameStyle] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_NameStyle] <span class="keyword">DEFAULT</span> ((0)),</code>
+<code>[Title] [nvarchar] (8) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[FirstName] [dbo].[Name] <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[MiddleName] [dbo].[Name] <span class="keyword">NULL</span>,</code>
+<code>[LastName] [dbo].[Name] <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</code>
+<code>[Suffix] [nvarchar] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[CompanyName] [nvarchar] (128) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[SalesPerson] [nvarchar] (256) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[EmailAddress] [nvarchar] (50) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span>,</code>
+<code>[Phone] [dbo].[Phone] <span class="keyword">NULL</span>,</code>
+<code>[rowguid] [uniqueidentifier] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">ROWGUIDCOL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_rowguid] <span class="keyword">DEFAULT</span> (newid()),</code>
+<code>[ModifiedDate] [datetime] <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">CONSTRAINT</span> [DF_Customer_ModifiedDate] <span class="keyword">DEFAULT</span> (getdate()),</code>
+<code>[New<span class="textInsert"> Prod</span>] [nchar] (10) <span class="keyword">COLLATE</span> SQL_Latin1_General_CP1_CI_AS <span class="keyword">NULL</span></code>
+<code>)</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> [SalesLT].[Customer] <span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> [PK_Customer_CustomerID] <span class="keyword">PRIMARY</span> <span class="keyword">KEY</span> <span class="keyword">CLUSTERED</span> ([CustomerID])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">CREATE</span> <span class="keyword">NONCLUSTERED</span> <span class="keyword">INDEX</span> [IX_Customer_EmailAddress] <span class="keyword">ON</span> [SalesLT].[Customer] ([EmailAddress])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> [SalesLT].[Customer] <span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> [AK_Customer_rowguid] <span class="keyword">UNIQUE</span> <span class="keyword">NONCLUSTERED</span> ([rowguid])</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Customer information.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', <span class="keyword">NULL</span>, <span class="keyword">NULL</span></code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'The customer''s organization.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'CompanyName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Primary key for Customer records.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'CustomerID'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">E</span>-mail address for the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'EmailAddress'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'First name of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'FirstName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Last name of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'LastName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Middle name or middle initial of the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'MiddleName'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Date and time the record was last updated.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'ModifiedDate'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'0 = The data in FirstName and LastName are stored in western style (first name, last name) order.  1 = Eastern style (last name, first name) order.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'NameStyle'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Phone number associated with the person.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Phone'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">ROWGUIDCOL</span> number uniquely identifying the record. Used to support a merge replication sample.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'The customer''s sales person, an employee of AdventureWorks Cycles.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'SalesPerson'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Surname suffix. For example, Sr. or Jr.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Suffix'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'<span class="keyword">A</span> courtesy title. For example, Mr. or Ms.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'Title'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Unique nonclustered constraint. Used to support replication samples.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'AK_Customer_rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of <span class="keyword">GETDATE</span>()', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_ModifiedDate'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of 0', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_NameStyle'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Default constraint value of <span class="keyword">NEWID</span>()', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'DF_Customer_rowguid'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Primary key (clustered) constraint', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">CONSTRAINT</span>', <span class="keyword">N</span>'PK_Customer_CustomerID'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Nonclustered index.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">INDEX</span>', <span class="keyword">N</span>'IX_Customer_EmailAddress'</code>
+<code><span class="keyword">GO</span></code>
+<code><span class="keyword">EXEC</span> sp_addextendedproperty <span class="keyword">N</span>'MS_Description', <span class="keyword">N</span>'Clustered index created by a primary key constraint.', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">INDEX</span>', <span class="keyword">N</span>'PK_Customer_CustomerID'</code>
+<code><span class="keyword">GO</span></code></pre></div>
+</div></details></details>
+</div>
+<div id="Dryrun2023-02-0711:32:17" class="tabcontent">
+<div style="display: flex; justify-content: left;">
+<h1>Dry run report</h1>
+</div>
+<pre><span class="comment">-- -====================================</span>
+<span class="comment">-- Flyway Dry Run (2023-02-07 11:32:51)</span>
+<span class="comment">-- -====================================</span>
+
+<span class="keyword">USE</span> [AdventureWorksLT2019]
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span>
+<span class="keyword">GO</span>
+<span class="keyword">USE</span> [AdventureWorksLT2019]
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span>
+<span class="keyword">GO</span>
+<span class="keyword">USE</span> [AdventureWorksLT2019]
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span>
+<span class="keyword">GO</span>
+
+<span class="comment">-- Executing: validate (with callbacks)</span>
+<span class="comment">-- ---------------------------------------------------------------------------------------</span>
+<span class="keyword">USE</span> [AdventureWorksLT2019]
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span>
+<span class="keyword">GO</span>
+
+<span class="comment">-- Executing: migrate (with callbacks)</span>
+<span class="comment">-- ---------------------------------------------------------------------------------------</span>
+<span class="keyword">USE</span> [AdventureWorksLT2019]
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span>
+<span class="keyword">GO</span>
+
+<span class="comment">-- Executing: migrate -> v015.20230207182851 (with callbacks)</span>
+<span class="comment">-- ---------------------------------------------------------------------------------------</span>
+
+<span class="comment">-- Source: C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migrations\V015_20230207182851__BMac.sql</span>
+<span class="comment">-- -------------------------------------------------------------------------------------------------------------------</span>
+<span class="keyword">SET</span> NUMERIC_ROUNDABORT <span class="keyword">OFF</span>
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, <span class="keyword">ARITHABORT</span>, QUOTED_IDENTIFIER, ANSI_NULLS <span class="keyword">ON</span>
+<span class="keyword">GO</span>
+<span class="keyword">PRINT</span> <span class="keyword">N</span>'Dropping extended properties'
+<span class="keyword">GO</span>
+<span class="keyword">EXEC</span> sp_dropextendedproperty <span class="keyword">N</span>'MS_Description', '<span class="keyword">SCHEMA</span>', <span class="keyword">N</span>'SalesLT', '<span class="keyword">TABLE</span>', <span class="keyword">N</span>'Customer', '<span class="keyword">COLUMN</span>', <span class="keyword">N</span>'PasswordSalt'
+<span class="keyword">GO</span>
+<span class="keyword">PRINT</span> <span class="keyword">N</span>'Altering [SalesLT].[Customer]'
+<span class="keyword">GO</span>
+<span class="keyword">ALTER</span> <span class="keyword">TABLE</span> [SalesLT].[Customer] <span class="keyword">ALTER</span> <span class="keyword">COLUMN</span> [PasswordSalt] [nchar] (10) <span class="keyword">NULL</span>
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> NUMERIC_ROUNDABORT <span class="keyword">OFF</span>
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, <span class="keyword">ARITHABORT</span>, QUOTED_IDENTIFIER, ANSI_NULLS, <span class="keyword">NOCOUNT</span> <span class="keyword">ON</span>
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> <span class="keyword">DATEFORMAT</span> <span class="keyword">YMD</span>
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> XACT_ABORT <span class="keyword">ON</span>
+<span class="keyword">GO</span>
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> [AdventureWorksLT2019].[dbo].[flyway_schema_history] ([installed_rank], [version], [description], [type], [script], [checksum], [installed_by], [execution_time], [success]) <span class="keyword">VALUES</span> (15, '015.20230207182851', 'BMac', '<span class="keyword">SQL</span>', 'V015_20230207182851__BMac.sql', -1918288806, 'sa', 6, 1)
+<span class="keyword">GO</span>
+<span class="keyword">USE</span> [AdventureWorksLT2019]
+<span class="keyword">GO</span>
+<span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span>
+<span class="keyword">GO</span></pre></div>
+</div>
+</div>
+</body>
+<script>
+function onTimestampClick(event, timestamp) {
+    let pages = document.getElementsByClassName("page");
+    for (let i = 0; i < pages.length; i++) {
+        pages[i].style.display = "none";
+    }
+    let selectedPage = document.getElementsByClassName("page " + timestamp)[0];
+    selectedPage.style.display = "block";
+    document.getElementById("open-" + timestamp).click();
+}
+function onTabClick(event, id) {
+  // Get all elements with class="tabcontent" and hide them
+  let tabcontents = document.getElementsByClassName("tabcontent");
+  for (let i = 0; i < tabcontents.length; i++) {
+    tabcontents[i].style.display = "none";
+  }
+  // Get all elements with class="tab" and remove the class "active"
+  let tabs = document.getElementsByClassName("tab");
+  for (let i = 0; i < tabs.length; i++) {
+    tabs[i].className = tabs[i].className.replace(" active", "");
+  }
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(id).style.display = "block";
+  event.currentTarget.className += " active";
+}
+let timestamp = document.getElementById("dropdown").value;
+onTimestampClick(null, timestamp);
+</script>
+</html>
