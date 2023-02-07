@@ -55,17 +55,9 @@ jobs:
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
           
-      # Set Output
-      - name: Log To File
+      # Trigger Log Workflow
+      - name: Trigger Run Log Comment On Pull Request
         if: ( ${{ success() }} || ${{ failure() }} )
         run: |
-          gh run view ${{ inputs.run_id }} --log > output.log
-      - name: Remove control characters
-        if: ( ${{ success() }} || ${{ failure() }} )
-        run: |
-          Get-Content output.log -Encoding UTF8 | Set-Content outputUTF8.log
-      - name: Comment Pull Request With Log
-        if: ( ${{ success() }} || ${{ failure() }} )
-        run: |
-          gh pr comment --body-file outputUTF8.log
+          gh workflow run commentLog.yml -r ${{ github.ref }} -f run_id="${{ github.run_id }}"
       

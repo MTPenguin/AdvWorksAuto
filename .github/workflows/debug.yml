@@ -51,9 +51,9 @@ jobs:
       #     echo "test=${{ steps.echo.outputs.TEST }}"
       #     gh pr comment --body "DEBUG END"- name: Comment Pull Request End
 
-      - name: Trigger Comment
+      - name: Trigger Run Log Comment On Pull Request
         run: |
           gh workflow run commentLog.yml -r ${{ github.ref }} -f run_id="${{ github.run_id }}"
-       
+      
 
       
