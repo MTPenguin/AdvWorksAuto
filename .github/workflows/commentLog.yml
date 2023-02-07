@@ -41,7 +41,7 @@ jobs:
           echo ${{ steps.log.outputs.LOG || 'none'}}
       - name: Comment Pull Request With Log
         run: |
-          gh pr comment --body ${{ toJSON(steps.log.outputs.LOG || "none") }}
+          gh pr comment --body "${{ toJSON(steps.log.outputs.LOG || 'none' ) }}"
       # - name: Comment Pull Request With Log
       #   run: |
       #     gh pr comment --body-file output.log
