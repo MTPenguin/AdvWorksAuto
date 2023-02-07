@@ -1,6 +1,6 @@
-# Simple workflow for putting runner logs in PR comments
+# Simple workflow for putting runner logs in Pull Request comments
 name: Comment Runner Log
-run-name: Commenting ${{ inputs.branch_name }} PR
+run-name: Commenting ${{ (inputs.failed_only == false && 'FAILED Run') }} On ${{ inputs.branch_name }} Pull Request
 
 on:
   # Allows you to run this workflow manually from the Actions tab AND from other actions (fwTaskPushCreateCheck)
