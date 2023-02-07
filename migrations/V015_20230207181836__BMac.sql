@@ -8,8 +8,7 @@ EXEC sp_dropextendedproperty N'MS_Description', 'SCHEMA', N'SalesLT', 'TABLE', N
 GO
 PRINT N'Altering [SalesLT].[Customer]'
 GO
-ALTER TABLE [SalesLT].[Customer] DROP
-COLUMN [PasswordSalt]
+ALTER TABLE [SalesLT].[Customer] ALTER COLUMN [PasswordSalt] [nchar] (10) NULL
 GO
 
 ﻿SET NUMERIC_ROUNDABORT OFF
