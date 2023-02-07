@@ -57,12 +57,15 @@ jobs:
           
       # Set Output
       - name: Log To File
+        if: ( ${{ success() }} || ${{ failure() }} )
         run: |
           gh run view ${{ inputs.run_id }} --log > output.log
       - name: Remove control characters
+        if: ( ${{ success() }} || ${{ failure() }} )
         run: |
-          get-content output.log -Encoding UTF8 | Set-Content outputUTF8.log
+          Get-Content output.log -Encoding UTF8 | Set-Content outputUTF8.log
       - name: Comment Pull Request With Log
+        if: ( ${{ success() }} || ${{ failure() }} )
         run: |
           gh pr comment --body-file outputUTF8.log
       
