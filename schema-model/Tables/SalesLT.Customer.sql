@@ -14,7 +14,8 @@ CREATE TABLE [SalesLT].[Customer]
 [PasswordHash] [varchar] (128) NOT NULL,
 [PasswordSalt] [varchar] (10) NOT NULL,
 [rowguid] [uniqueidentifier] NOT NULL ROWGUIDCOL CONSTRAINT [DF_Customer_rowguid] DEFAULT (newid()),
-[ModifiedDate] [datetime] NOT NULL CONSTRAINT [DF_Customer_ModifiedDate] DEFAULT (getdate())
+[ModifiedDate] [datetime] NOT NULL CONSTRAINT [DF_Customer_ModifiedDate] DEFAULT (getdate()),
+[New] [nchar] (10) NULL
 )
 GO
 ALTER TABLE [SalesLT].[Customer] ADD CONSTRAINT [PK_Customer_CustomerID] PRIMARY KEY CLUSTERED ([CustomerID])
