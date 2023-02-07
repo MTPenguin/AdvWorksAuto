@@ -29,22 +29,25 @@ jobs:
     runs-on: self-hosted
     steps:
       # Set Output
-      - name: Get Output
-        id: log
-        run: |
-          echo "LOG=$( gh run view ${{ inputs.run_id }} --log ) >> $env:GITHUB_OUTPUT
-      # - name: Log File
+      # - name: Get Output
+      #   id: log
       #   run: |
-      #     gh run view ${{ inputs.run_id }} --log > output.log
-      - name: Debug Log
-        run: |
-          echo ${{ steps.log.outputs.LOG || 'none'}}
-      - name: Comment Pull Request With Log
-        run: |
-          gh pr comment --body "${{ toJSON(steps.log.outputs.LOG || 'none' ) }}"
+      #     echo "LOG=$( gh run view ${{ inputs.run_id }} --log ) >> $env:GITHUB_OUTPUT
+      # - name: Debug Log
+      #   run: |
+      #     echo ${{ steps.log.outputs.LOG || 'none'}}
       # - name: Comment Pull Request With Log
       #   run: |
-      #     gh pr comment --body-file output.log
+      #     gh pr comment --body "${{ toJSON(steps.log.outputs.LOG || 'none' ) }}"
+      - name: Log File
+        run: |
+          gh run view ${{ inputs.run_id }} --log > output.log
+      - name: Remove control characters
+        run: |
+          get-content output.log -Encoding UTF8 | Set-Content outputUTF8.log
+      - name: Comment Pull Request With Log
+        run: |
+          gh pr comment --body-file outputUTF8.log
       
 
 
