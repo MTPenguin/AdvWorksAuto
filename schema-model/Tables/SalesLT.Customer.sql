@@ -12,7 +12,6 @@ CREATE TABLE [SalesLT].[Customer]
 [EmailAddress] [nvarchar] (50) NULL,
 [Phone] [dbo].[Phone] NULL,
 [PasswordHash] [varchar] (128) NOT NULL,
-[PasswordSalt] [varchar] (10) NOT NULL,
 [rowguid] [uniqueidentifier] NOT NULL ROWGUIDCOL CONSTRAINT [DF_Customer_rowguid] DEFAULT (newid()),
 [ModifiedDate] [datetime] NOT NULL CONSTRAINT [DF_Customer_ModifiedDate] DEFAULT (getdate()),
 [New] [nchar] (10) NULL
@@ -43,8 +42,6 @@ GO
 EXEC sp_addextendedproperty N'MS_Description', N'0 = The data in FirstName and LastName are stored in western style (first name, last name) order.  1 = Eastern style (last name, first name) order.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'COLUMN', N'NameStyle'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Password for the e-mail account.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'COLUMN', N'PasswordHash'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'Random value concatenated with the password string before the password is hashed.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'COLUMN', N'PasswordSalt'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Phone number associated with the person.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'COLUMN', N'Phone'
 GO
