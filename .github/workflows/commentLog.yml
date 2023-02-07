@@ -39,7 +39,10 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     runs-on: self-hosted
     steps:
-      # Set Output
+      # Set Output After Delay For Trigger Workflow To Finish
+      - name: Sleep for 5 seconds
+        run: Start-Sleep -s 5
+        shell: powershell
       
       # - name: Get Output
       #   id: log
