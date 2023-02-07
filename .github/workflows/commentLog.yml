@@ -9,6 +9,13 @@ on:
       run_id:
         description: Run ID
         required: true
+      repo_name:
+        description: Repository Name
+        required: true
+      branch_name:
+        description: Branch Name
+        required: true
+      
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -48,7 +55,7 @@ jobs:
           Get-Content output.log -Encoding UTF8 | Set-Content outputUTF8.log
       - name: Comment Pull Request With Log
         run: |
-          gh pr comment --body-file outputUTF8.log
+          gh pr comment -R ${{ input.repo_name }} ${{ input.branch_name }} --body-file outputUTF8.log
       
 
 
