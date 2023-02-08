@@ -19,3 +19,4 @@ GO
 
 PRINT(N'Update 1 row in [SalesLT].[Customer]')
 UPDATE [SalesLT].[Customer] SET [Suffix]=N'5' WHERE [CustomerID] = 5
+
