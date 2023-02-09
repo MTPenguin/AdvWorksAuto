@@ -1,7 +1,7 @@
 # This is a workflow to check and create a pull request for db changes
  
 name: Flyway Check Pipeline (Self-Hosted)
-run-name: Check ${{ github.head_ref || github.ref_name }}  migration to main
+run-name: Check ${{ github.head_ref || github.ref_name }}  migration to ${{ github.event.repository.full_name }}/${{ github.event.repository.default_branch }}
 
 # Controls when the workflow will run
 on:
