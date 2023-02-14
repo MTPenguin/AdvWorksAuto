@@ -27,6 +27,15 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     runs-on: self-hosted
     steps:
+      - name: Set the value
+        id: step_one
+        run: |
+          echo "action_state=yellow" >> $GITHUB_ENV
+      - name: Use the value
+        id: step_two
+        run: |
+          echo "${{ env.action_state }}" # This will output 'yellow'
+      
       # Test Context
       - name: Echo Context
         id: echo_context
