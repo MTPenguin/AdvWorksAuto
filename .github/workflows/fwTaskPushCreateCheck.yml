@@ -67,14 +67,22 @@ jobs:
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="${{ env.SCRIPT_LOCATIONS }}" info undo info -url="${{ env.JDBC }}" -cleanDisabled='false' -target="${{ env.FIRST_UNDO_SCRIPT }}"
  
-       # Create a directory to stage the artifact files
+      # Create a directory to stage the artifact files
       - name: Stage files for publishing
         if: env.publishArtifacts == 'true'
         run: |
           cp -R ${{ github.WORKSPACE }}/migrations Artifact_Files/Migration/
+      # Test for environment specific migrations
+      - name: Set Env
+        run: |
+          echo "env_migrations=$(Test-Path ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} )" >> $env:GITHUB_ENV
+      
+      # Create a directory to stage the artifact files
+      - name: Stage files for publishing
+        if: env.publishArtifacts == 'true' && env.env_migrations == 'True'
+        run: |
           mkdir -force Artifact_Files/Migration-${{ vars.ENV_NAME }}
           cp -R ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/ || : 
-        # || : used to suppress exit code (when dir doesn't exist)
       
       #After migration scripts are validated, publish them as an artifact
       - name: Publish Validated Migration Scripts as Artifact
@@ -86,7 +94,7 @@ jobs:
  
       #After migration environment specific scripts are validated, publish them as an artifact
       - name: Publish Validated Environment Specific Migration Scripts as Artifact
-        if: env.publishArtifacts == 'true'
+        if: env.publishArtifacts == 'true' && env.env_migrations == 'True'
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-build-artifact
