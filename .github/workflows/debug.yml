@@ -41,13 +41,18 @@ jobs:
         run: |
           echo "dir_2=2" >> $GITHUB_ENV
       
+      # Read env 2
+      - name: Read env.dir_2
+        run: |
+          echo ${{ env.dir_2 }}
+      
       # Read env
       - name: Read Env
         run: |
           echo ${{ env }}
       
       # Read env dir_exists
-      - name: Read Env
+      - name: Read env.dir_exists
         run: |
           echo ${{ env.dir_exists }}
       
