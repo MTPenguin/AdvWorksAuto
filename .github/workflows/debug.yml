@@ -9,11 +9,10 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  write-all
-  # contents: read
-  # pull-requests: write
-  # id-token: write
-  # actions: write
+  contents: read
+  pull-requests: write
+  id-token: write
+  actions: write
 
 # Allow one concurrent deployment
 concurrency:
@@ -31,7 +30,7 @@ jobs:
       - name: Set the value
         id: step_one
         run: |
-          echo "action_state=yellow" >> $GITHUB_ENV
+          echo "action_state=yellow" >> $env:GITHUB_ENV
       - name: Use the value
         id: step_two
         run: |
@@ -46,10 +45,10 @@ jobs:
       # Test setting env
       - name: Set Env
         run: |
-          echo "dir_exists=$(Test-Path ${{ vars.ENV_NAME }})" >> $GITHUB_ENV
+          echo "dir_exists=$(Test-Path ${{ vars.ENV_NAME }})" >> $env:GITHUB_ENV
       - name: Set Env 2
         run: |
-          echo "dir_2=2" >> $GITHUB_ENV
+          echo "dir_2=2" >> $env:GITHUB_ENV
       
       # Read env 2
       - name: Read env.dir_2
