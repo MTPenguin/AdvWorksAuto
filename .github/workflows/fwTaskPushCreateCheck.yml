@@ -145,24 +145,27 @@ jobs:
           continue-on-error: false
  
         - name: Publish Check Report as Artifact
-          if: env.publishArtifacts == 'true'
+          if: env.publishArtifacts == 'true' && (${{ failure() }} || ${{ success() }})
           uses: actions/upload-artifact@v3
           with: 
             name: flyway-reports
             path: ${{ github.WORKSPACE }}\reports
 
         - name: Commit report
+          if: ${{ failure() }} || ${{ success() }}
           run: |
             git add ${{ env.REPORT_PATH }}
-            git commit -am "Automated report"
+            git commit -am "Automated report here:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
             git push
+        
+        - name: Trigger Deploy
+          if: ${{ failure() }} || ${{ success() }}
+          run: |
+            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f report_file="${{ env.REPORT_FILE }}"
         
         - name: Create Pull Request
           run: |
             gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action.'
             gh pr merge --auto --merge
 
-        - name: Trigger Deploy
-          run: |
-            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f report_file="${{ env.REPORT_FILE }}"
-       
+        
