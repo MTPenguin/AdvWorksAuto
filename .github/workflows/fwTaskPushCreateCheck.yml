@@ -73,7 +73,7 @@ jobs:
         run: |
           cp -R ${{ github.WORKSPACE }}/migrations Artifact_Files/Migration/
           mkdir -force Artifact_Files/Migration-${{ vars.ENV_NAME }}
-          cp -R ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/
+          cp -R -force ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/
           
       
       #After migration scripts are validated, publish them as an artifact
