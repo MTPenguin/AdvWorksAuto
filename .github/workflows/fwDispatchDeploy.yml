@@ -14,6 +14,8 @@ env:
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
   # If the first undo script is U002, this will validate all undo scripts up to and including that
   FIRST_UNDO_SCRIPT: ${{ secrets.FIRST_UNDO_SCRIPT }}
+  # Used for environment specific migration scripts
+  SCRIPT_LOCATIONS: "filesystem:${{ GITHUB.WORKSPACE }}\\migrations"
   # Enable this for additional debug logging
   ACTIONS_RUNNER_DEBUG: true 
  
@@ -57,7 +59,7 @@ jobs:
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="${{ env.SCRIPT_LOCATIONS }}" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
           
       # Trigger Log Workflow On Failure
       - name: Trigger Run Log Comment On Pull Request
