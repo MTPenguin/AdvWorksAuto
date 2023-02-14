@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8">
+<style>
+pre {
+    counter-reset: line;
+    font-size: large;
+}
+code {
+    counter-increment: line;
+}
+code:before {
+    content: counter(line);
+    color: #808080;
+    margin-right: 10px;
+    margin-left: 5px;
+    font-size: 14px;
+    -webkit-user-select: none;
+}
+.added {
+    background-color: #45EA85
+}
+.keyword {
+    color: #0000ff;
+}
+.comment {
+    color: #808080;
+}
+.after {
+    background-color: #E6FFEc;
+}
+.before {
+    background-color: #FFEBE9;
+}
+.textInsert {
+   background-color: #ABF2BC
+}
+.textDelete {
+   background-color: #FF818266
+}
+.tabs {
+   overflow: hidden;
+   margin: 0 100px 30px 0;
+   border-bottom: 1px solid #BBBBBB;
+}
+.tabs button {
+   background-color: transparent;
+   border: none;
+   cursor: pointer;
+   padding: 0px 40px;
+   max-width: 200px;
+}
+.tabs button:hover, .tabs button.active {
+   border-bottom: 2px solid #CC0000;
+}
+.tabcontent, .page {
+    display: none;
+}
+.dropdown>select {
+    padding: 8px 12px;
+}
+summary {
+   display: inline;
+   list-style-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBjbGFzcz0idy02IGgtNiI+DQogIDxwYXRoIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTguMjUgNC41bDcuNSA3LjUtNy41IDcuNSIgLz4NCjwvc3ZnPg0K);
+}
+summary>h3, summary>h4 {
+   display: list-item;
+   list-style-position: inside;
+}
+details[open]>summary {
+    list-style-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBjbGFzcz0idy02IGgtNiI+DQogIDxwYXRoIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTE5LjUgOC4yNWwtNy41IDcuNS03LjUtNy41IiAvPg0KPC9zdmc+DQo=);
+}
+h3::marker {
+   font-size: 30px;
+}
+h4::marker {
+   font-size: 24px;
+}
+details {
+   border: 2px solid #F2F2F2;
+   border-radius: 5px;
+   padding: 0 6px;
+   margin-top: 10px;
+}
+details>details {
+    background-color: #F2F2F2;
+    padding: 0 4px 4px 6px;
+    margin: 0 10px 10px 0;
+}
+</style>
+</head>
+<body style="font-family: sans-serif">
+<div style="margin: 30px;">
+<div style="float: right">
+<a href="https://flywaydb.org/" target="_newtab"><img src="" width=72 height=72/></a>
+</div>
+<div class="dropdown" style="float: right; clear: both; margin-top: 50px">
+<label for="dropdown">Report generated:</label>
+<select onchange="onTimestampClick(event, this.value)" id="dropdown">
+</select>
+</div>
+</div>
+</body>
+<script>
+function onTimestampClick(event, timestamp) {
+    let pages = document.getElementsByClassName("page");
+    for (let i = 0; i < pages.length; i++) {
+        pages[i].style.display = "none";
+    }
+    let selectedPage = document.getElementsByClassName("page " + timestamp)[0];
+    selectedPage.style.display = "block";
+    document.getElementById("open-" + timestamp).click();
+}
+function onTabClick(event, id) {
+  // Get all elements with class="tabcontent" and hide them
+  let tabcontents = document.getElementsByClassName("tabcontent");
+  for (let i = 0; i < tabcontents.length; i++) {
+    tabcontents[i].style.display = "none";
+  }
+  // Get all elements with class="tab" and remove the class "active"
+  let tabs = document.getElementsByClassName("tab");
+  for (let i = 0; i < tabs.length; i++) {
+    tabs[i].className = tabs[i].className.replace(" active", "");
+  }
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(id).style.display = "block";
+  event.currentTarget.className += " active";
+}
+let timestamp = document.getElementById("dropdown").value;
+onTimestampClick(null, timestamp);
+</script>
+</html>
