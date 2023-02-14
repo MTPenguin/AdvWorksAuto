@@ -40,7 +40,7 @@ jobs:
     env:
       stage: 'Prod'
       # Used for environment specific migration scripts
-      SCRIPT_LOCATIONS: "filesystem:${{ GITHUB.WORKSPACE }}\\migrations"
+      SCRIPT_LOCATIONS: "filesystem:${{ GITHUB.WORKSPACE }}\\migrations, filesystem:${{ GITHUB.WORKSPACE }}\\migrations-${{ vars.ENV_NAME }}"
       databaseName: ${{ secrets.databaseName}}
       JDBC: ${{ secrets.JDBC }}
       userName: ${{ secrets.userName }}
