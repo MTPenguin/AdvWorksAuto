@@ -24,7 +24,7 @@ env:
 
 jobs:
   job1:
-    environment: "$JOB_ENVIRONMENT"
+    environment: "{{ $JOB_ENVIRONMENT }}"
     env:
       ACTIONS_RUNNER_DEBUG: true 
       GH_TOKEN: ${{ github.token }}
