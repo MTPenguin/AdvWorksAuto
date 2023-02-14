@@ -40,10 +40,16 @@ jobs:
           echo "dir_exists=$(Test-Path ${{ vars.ENV_NAME }})" >> $GITHUB_ENV
       
       # Read env
-      - name: Set Env
+      - name: Read Env
         id: read_env
         run: |
           echo ${{ env }}
+      
+      # Read env dir_exists
+      - name: Read Env
+        id: read_env
+        run: |
+          echo ${{ env.dir_exists }}
       
       - name: Checkout
         uses: actions/checkout@v3
