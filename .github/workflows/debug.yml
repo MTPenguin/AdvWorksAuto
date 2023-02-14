@@ -43,13 +43,11 @@ jobs:
       
       # Read env
       - name: Read Env
-        id: read_env
         run: |
           echo ${{ env }}
       
       # Read env dir_exists
       - name: Read Env
-        id: read_env
         run: |
           echo ${{ env.dir_exists }}
       
