@@ -73,8 +73,8 @@ jobs:
         run: |
           cp -R ${{ github.WORKSPACE }}/migrations Artifact_Files/Migration/
           mkdir -force Artifact_Files/Migration-${{ vars.ENV_NAME }}
-          cp -R -force ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/
-          
+          cp -R ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/ || : 
+        # || : used to suppress exit code (when dir doesn't exist)
       
       #After migration scripts are validated, publish them as an artifact
       - name: Publish Validated Migration Scripts as Artifact
