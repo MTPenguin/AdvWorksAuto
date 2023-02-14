@@ -38,6 +38,10 @@ jobs:
         id: set_env
         run: |
           echo "dir_exists=$(Test-Path ${{ vars.ENV_NAME }})" >> $GITHUB_ENV
+      - name: Set Env 2
+        id: set_env
+        run: |
+          echo "dir_2=2" >> $GITHUB_ENV
       
       # Read env
       - name: Read Env
