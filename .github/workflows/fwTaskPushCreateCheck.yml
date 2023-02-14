@@ -34,7 +34,7 @@ jobs:
     env:
       stage: 'Build'
       # Used for environment specific migration scripts
-      SCRIPT_LOCATIONS: "filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ github.environment }}"
+      SCRIPT_LOCATIONS: "filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ environment }}, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.environment }}, filesystem:${{ github.WORKSPACE }}\\migrations-${{ deployment.environment }}"
       # Environment Secrets - Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrets > Actions section, specially related to the environment in question) #
       databaseName: ${{ secrets.databaseName}} 
       JDBC: ${{ secrets.JDBC }} 
@@ -93,6 +93,8 @@ jobs:
       needs: build
       env:
         stage: 'Prod'
+        # Used for environment specific migration scripts
+        SCRIPT_LOCATIONS: "filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ environment }}, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.environment }}, filesystem:${{ github.WORKSPACE }}\\migrations-${{ github.event.deployment.environment }}"
         branch_name: ${{ github.head_ref || github.ref_name }} 
         # Environment Secrets - Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrets > Actions section, specially related to the environment in question) #
         databaseName: ${{ secrets.databaseName }}
@@ -121,7 +123,7 @@ jobs:
         - name: Create Check Reports
           if: env.generateDriftAndChangeReport == 'true'
           run: |
-            flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\migrations" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ env.REPORT_PATH }}${{ env.REPORT_FILE }}"
+            flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="${{ env.SCRIPT_LOCATIONS }}" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ env.REPORT_PATH }}${{ env.REPORT_FILE }}"
           continue-on-error: false
  
         - name: Publish Check Report as Artifact
