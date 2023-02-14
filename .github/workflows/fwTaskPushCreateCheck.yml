@@ -21,7 +21,7 @@ env:
   # If the first undo script is U002, this will validate all undo scripts up to and including that
   FIRST_UNDO_SCRIPT: ${{ secrets.FIRST_UNDO_SCRIPT }}
   # Used for environment specific migration scripts
-  SCRIPT_LOCATIONS: "filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ github.environment"
+  SCRIPT_LOCATIONS: "filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ github.environment }}"
   # Enable this for additional debug logging
   ACTIONS_RUNNER_DEBUG: true 
  
