@@ -9,10 +9,11 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
-  pull-requests: write
-  id-token: write
-  actions: write
+  write-all
+  # contents: read
+  # pull-requests: write
+  # id-token: write
+  # actions: write
 
 # Allow one concurrent deployment
 concurrency:
