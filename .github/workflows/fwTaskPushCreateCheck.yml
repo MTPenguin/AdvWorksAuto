@@ -72,7 +72,8 @@ jobs:
         if: env.publishArtifacts == 'true'
         run: |
           cp -R ${{ github.WORKSPACE }}/migrations Artifact_Files/Migration/
- 
+          cp -R ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/
+          
       
       #After migration scripts are validated, publish them as an artifact
       - name: Publish Validated Migration Scripts as Artifact
@@ -81,6 +82,14 @@ jobs:
         with: 
           name: flyway-build-artifact
           path: Artifact_Files/Migration/
+ 
+      #After migration environment specific scripts are validated, publish them as an artifact
+      - name: Publish Validated Migration Scripts as Artifact
+        if: env.publishArtifacts == 'true'
+        uses: actions/upload-artifact@v3
+        with: 
+          name: flyway-build-artifact
+          path: Artifact_Files/Migration-${{ vars.ENV_NAME }}/
  
   prod-preparation:
       permissions: write-all
