@@ -72,6 +72,7 @@ jobs:
         if: env.publishArtifacts == 'true'
         run: |
           cp -R ${{ github.WORKSPACE }}/migrations Artifact_Files/Migration/
+          mkdir -force Artifact_Files/Migration-${{ vars.ENV_NAME }}
           cp -R ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/
           
       
@@ -84,7 +85,7 @@ jobs:
           path: Artifact_Files/Migration/
  
       #After migration environment specific scripts are validated, publish them as an artifact
-      - name: Publish Validated Migration Scripts as Artifact
+      - name: Publish Validated Environment Specific Migration Scripts as Artifact
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
