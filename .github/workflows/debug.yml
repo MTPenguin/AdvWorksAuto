@@ -33,6 +33,18 @@ jobs:
         run: |
           echo "${{ vars.ENV_NAME }}"
       
+      # Test setting env
+      - name: Set Env
+        id: set_env
+        run: |
+          echo "dir_exists=$(Test-Path ${{ vars.ENV_NAME }})"
+      
+      # Read env
+      - name: Set Env
+        id: read_env
+        run: |
+          echo ${{ env }}
+      
       - name: Checkout
         uses: actions/checkout@v3
 
