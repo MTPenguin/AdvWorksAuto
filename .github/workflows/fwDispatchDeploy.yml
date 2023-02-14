@@ -14,8 +14,6 @@ env:
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
   # If the first undo script is U002, this will validate all undo scripts up to and including that
   FIRST_UNDO_SCRIPT: ${{ secrets.FIRST_UNDO_SCRIPT }}
-  # Used for environment specific migration scripts
-  SCRIPT_LOCATIONS: "filesystem:${{ GITHUB.WORKSPACE }}\\migrations"
   # Enable this for additional debug logging
   ACTIONS_RUNNER_DEBUG: true 
  
@@ -41,6 +39,8 @@ jobs:
     if: github.event.review.state == 'approved' #On approval
     env:
       stage: 'Prod'
+      # Used for environment specific migration scripts
+      SCRIPT_LOCATIONS: "filesystem:${{ GITHUB.WORKSPACE }}\\migrations"
       databaseName: ${{ secrets.databaseName}}
       JDBC: ${{ secrets.JDBC }}
       userName: ${{ secrets.userName }}
