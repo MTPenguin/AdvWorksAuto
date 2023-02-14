@@ -19,9 +19,12 @@ concurrency:
   group: "debug"
   cancel-in-progress: true
 
+env:
+  JOB_ENVIRONMENT: "george"
+
 jobs:
   job1:
-    environment: 'testBB'
+    environment: "$JOB_ENVIRONMENT"
     env:
       ACTIONS_RUNNER_DEBUG: true 
       GH_TOKEN: ${{ github.token }}
