@@ -21,11 +21,18 @@ concurrency:
 
 jobs:
   job1:
+    environment: 'testBB'
     env:
       ACTIONS_RUNNER_DEBUG: true 
       GH_TOKEN: ${{ github.token }}
     runs-on: self-hosted
     steps:
+      # Test Context
+      - name: Echo Context
+        id: echo_context
+        run: |
+          echo "${{ github.event.deploy }}"
+      
       - name: Checkout
         uses: actions/checkout@v3
 
