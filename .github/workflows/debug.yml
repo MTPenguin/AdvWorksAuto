@@ -32,9 +32,9 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     runs-on: self-hosted
     steps:
-      - name: Echo Context
-        run: |
-          echo "${{ toJSON(github) }}"
+      # - name: Echo Context
+      #   run: |
+      #     echo "${{ toJSON(github) }}"
       - name: Echo Event
         run: |
           echo "${{ toJson(github.event) }}"
