@@ -31,7 +31,6 @@ jobs:
       ACTIONS_RUNNER_DEBUG: true 
       GH_TOKEN: ${{ github.token }}
       GITHUB_CONTEXT: ${{ toJson(github) }}
-      ENV_CONTEXT: ${{ toJson(env) }}	
       JOB_CONTEXT: ${{ toJson(job) }}
       STEPS_CONTEXT: ${{ toJson(steps) }}	
       RUNNER_CONTEXT: ${{ toJson(runner) }}	
@@ -45,7 +44,6 @@ jobs:
       - name: Echo Contexts
         run: |
           echo "$env:GITHUB_CONTEXT"
-          echo "$env:ENV_CONTEXT"
           echo "$env:JOB_CONTEXT"
           echo "$env:STEPS_CONTEXT"
           echo "$env:RUNNER_CONTEXT"
