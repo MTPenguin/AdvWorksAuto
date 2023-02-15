@@ -3,6 +3,11 @@ name: DEBUG
 run-name: DEBUG ${{ github.ref }}
 
 on:
+  # Triggers the workflow on push or pull request events but only for branches beginning with 'task' that have changes in the migrations folder.
+  push:
+    branches:
+      - 'debug**'
+
   # Allows you to run this workflow manually from the Actions tab AND from other actions (fwTaskPushCreateCheck)
   workflow_dispatch:
 

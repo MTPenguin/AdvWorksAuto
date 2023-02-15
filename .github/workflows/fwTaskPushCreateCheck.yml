@@ -76,7 +76,7 @@ jobs:
         run: |
           cp -R ${{ github.WORKSPACE }}/migrations Artifact_Files/Migration/
       # Test for environment specific migrations
-      - name: Set Env
+      - name: Set Env for environment specific files
         run: |
           echo "env_migrations=$(Test-Path ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} )" >> $env:GITHUB_ENV
       
