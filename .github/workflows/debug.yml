@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   job1:
-    environment: debug
+    environment: debug_env_test_name_that_should_be_really_easy_to_see_in_a_context_dump_for_DEBUGGING_THE_BUGGER
     env:
       ACTIONS_RUNNER_DEBUG: true 
       GH_TOKEN: ${{ github.token }}
@@ -40,7 +40,7 @@ jobs:
       - name: Echo Event
         run: |
           echo "$env:GITHUB_EVENT"
-      - name: Get/Set deployments
+      - name: Get/Set deployment environment
         run: |
           $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
           echo "deployment_environment=$( $deployments[$deployments.Count - 1] | select -expand environment )" >> $env:GITHUB_ENV
