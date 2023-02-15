@@ -37,7 +37,7 @@ jobs:
       #     echo "${{ toJSON(github) }}"
       - name: Echo Event
         run: |
-          echo "${{ (github.event) }}"
+          echo "${{ toJson(github.event) }}"
       - name: Set the value
         id: step_one
         run: |
