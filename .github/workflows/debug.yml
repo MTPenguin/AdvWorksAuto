@@ -43,7 +43,7 @@ jobs:
       - name: Get/Set deployments
         run: |
           $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
-          echo "deployment=$($deployments[$deployments.Count - 1])" >> $env:GITHUB_ENV
+          echo "deployment=$( $deployments[$deployments.Count - 1] | ConvertTo-Json )" >> $env:GITHUB_ENV
       - name: View deployment environment
         run: |
           echo "$env:deployment.environment"
