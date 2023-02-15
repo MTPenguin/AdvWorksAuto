@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   job1:
-    environment: debug_env_test_name_that_should_be_really_easy_to_see_in_a_context_dump_for_DEBUGGING_THE_BUGGER_ONE_MORE_TIME_TO_BE_SURE
+    environment: DEBUG_ENVIRONMENT
     env:
       ACTIONS_RUNNER_DEBUG: true 
       GH_TOKEN: ${{ github.token }}
