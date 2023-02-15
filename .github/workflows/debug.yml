@@ -42,7 +42,7 @@ jobs:
           echo "$env:GITHUB_EVENT"
       - name: Get deployments
         run: |
-          curl -X GET ${{ $env:GITHUB_EVENT.repository.deployments_url }}
+          curl -X GET ${{ github.event.repository.deployments_url }}
       - name: Set the value
         id: step_one
         run: |
