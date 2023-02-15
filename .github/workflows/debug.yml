@@ -30,15 +30,16 @@ jobs:
     env:
       ACTIONS_RUNNER_DEBUG: true 
       GH_TOKEN: ${{ github.token }}
-      CONTEXT: ${{ toJson(github) }}
+      GITHUB_CONTEXT: ${{ toJson(github) }}
+      GITHUB_EVENT: ${{ toJson(github.event) }}
     runs-on: self-hosted
     steps:
       - name: Echo Context
         run: |
-          echo "$CONTEXT"
+          echo "$GITHUB_CONTEXT"
       - name: Echo Event
         run: |
-          echo "${{ toJson(github.event) }}"
+          echo "$GITHUB_EVENT"
       - name: Set the value
         id: step_one
         run: |
