@@ -36,10 +36,10 @@ jobs:
     steps:
       - name: Echo Context
         run: |
-          echo "$GITHUB_CONTEXT"
+          echo "$env:GITHUB_CONTEXT"
       - name: Echo Event
         run: |
-          echo "$GITHUB_EVENT"
+          echo "$env:GITHUB_EVENT"
       - name: Set the value
         id: step_one
         run: |
