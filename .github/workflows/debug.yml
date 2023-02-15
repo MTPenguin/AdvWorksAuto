@@ -32,8 +32,12 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GITHUB_CONTEXT: ${{ toJson(github) }}
       GITHUB_EVENT: ${{ toJson(github.event) }}
+      DEPLOYMENT: ${{ toJson(deployment) }}
     runs-on: self-hosted
     steps:
+      - name: Echo Deployment
+        run: |
+          echo "$env:DEPLOYMENT"
       - name: Echo Context
         run: |
           echo "$env:GITHUB_CONTEXT"
