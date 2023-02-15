@@ -153,6 +153,8 @@ jobs:
         - name: Commit report
           if: ${{ failure() }} || ${{ success() }}
           run: |
+            git config --global user.name "MTPenguin"
+            git config --global user.email "MTPenguin@youremail.com"
             git add ${{ env.REPORT_PATH }}
             git commit -am "Automated report here:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
             git push

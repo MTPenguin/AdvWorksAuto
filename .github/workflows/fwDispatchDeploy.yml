@@ -32,7 +32,7 @@ jobs:
       # id-token: write
       actions: write
 
-    name: Deploy Production
+    name: Deploy Production On Approval
     # The type of runner that the job will run on
     runs-on: self-hosted
     environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
