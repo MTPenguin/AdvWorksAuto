@@ -31,15 +31,30 @@ jobs:
       ACTIONS_RUNNER_DEBUG: true 
       GH_TOKEN: ${{ github.token }}
       GITHUB_CONTEXT: ${{ toJson(github) }}
-      GITHUB_EVENT: ${{ toJson(github.event) }}
+      ENV_CONTEXT: ${{ toJson(env) }}	
+      JOB_CONTEXT: ${{ toJson(job) }}
+      STEPS_CONTEXT: ${{ toJson(steps) }}	
+      RUNNER_CONTEXT: ${{ toJson(runner) }}	
+      SECRETS_CONTEXT: ${{ toJson(secrets) }}	
+      STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+      MATRIX_CONTEXT: ${{ toJson(matrix) }}	
+      NEEDS_CONTEXT: ${{ toJson(needs) }}
+      
     runs-on: self-hosted
     steps:
-      # - name: Echo Context
-      #   run: |
-      #     echo "$env:GITHUB_CONTEXT"
-      - name: Echo Event
+      - name: Echo Contexts
         run: |
-          echo "$env:GITHUB_EVENT"
+          echo "$env:GITHUB_CONTEXT"
+          echo "$env:ENV_CONTEXT"
+          echo "$env:JOB_CONTEXT"
+          echo "$env:STEPS_CONTEXT"
+          echo "$env:RUNNER_CONTEXT"
+          echo "$env:SECRETS_CONTEXT"
+          echo "$env:STRATEGY_CONTEXT"
+          echo "$env:MATRIX_CONTEXT"
+          echo "$env:NEEDS_CONTEXT"
+      
+      
       - name: Get/Set deployment environment
         run: |
           $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
