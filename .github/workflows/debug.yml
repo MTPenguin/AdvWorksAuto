@@ -32,6 +32,9 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     runs-on: self-hosted
     steps:
+      - name: Echo Context
+        run: |
+          echo "${{ github.event }}"
       - name: Set the value
         id: step_one
         run: |
