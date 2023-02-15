@@ -34,7 +34,10 @@ jobs:
     steps:
       - name: Echo Context
         run: |
-          echo "${{ github.event }}"
+          echo "${{ toJSON(github) }}"
+      - name: Echo Event
+        run: |
+          echo "${{ toJson(github.event) }}"
       - name: Set the value
         id: step_one
         run: |
