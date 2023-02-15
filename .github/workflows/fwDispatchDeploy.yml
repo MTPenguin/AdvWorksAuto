@@ -40,7 +40,6 @@ jobs:
     env:
       stage: 'Prod'
       # Used for environment specific migration scripts
-      SCRIPT_LOCATIONS: "filesystem:${{ GITHUB.WORKSPACE }}\\migrations, filesystem:${{ GITHUB.WORKSPACE }}\\migrations-${{ vars.ENV_NAME }}"
       databaseName: ${{ secrets.databaseName}}
       JDBC: ${{ secrets.JDBC }}
       userName: ${{ secrets.userName }}
@@ -49,6 +48,10 @@ jobs:
         
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Get/Set deployment environment
+        run: |
+          $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+          echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
@@ -59,7 +62,7 @@ jobs:
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="${{ env.SCRIPT_LOCATIONS }}" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
           
       # Trigger Log Workflow On Failure
       - name: Trigger Run Log Comment On Pull Request
