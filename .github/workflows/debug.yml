@@ -48,7 +48,7 @@ jobs:
           echo "$env:deployments"
       - name: Get/Set deployments size
         run: |
-          $deployments = $env:deployments
+          $deployments = ${{ env.deployments }}
           echo "deployments_count=${$deployments[$deployments.Count - 1])"
       - name: View deployment_count
         run: |
