@@ -11,17 +11,19 @@ on:
       - 'task**'
     paths:
       - 'migrations/**'
- 
+      - 'migrations-build/**'
+      - 'migrations-prod-check/**'
+      - 'migrations-prod/**'
+      
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
  
 env:
- 
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
   # If the first undo script is U002, this will validate all undo scripts up to and including that
   FIRST_UNDO_SCRIPT: ${{ secrets.FIRST_UNDO_SCRIPT }}
   # Enable this for additional debug logging
-  ACTIONS_RUNNER_DEBUG: true 
+  ACTIONS_RUNNER_DEBUG: true
  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -45,6 +47,11 @@ jobs:
  
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Get/Set deployment environment
+        run: |
+          $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+          echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
+          echo "${{ env.deployment_environment }}"
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
@@ -52,34 +59,52 @@ jobs:
       - name: Clean Build DB
         if: env.executeBuild == 'true'
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info clean info -url="${{ env.JDBC }}" -cleanDisabled='false'
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info clean info -url="${{ env.JDBC }}" -cleanDisabled='false'
         
       # Runs the Flyway Migrate command against the Build database
       - name: Migrate Build DB
         if: env.executeBuild == 'true'
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
           
       # Runs the Flyway Undo command against the Build database
       - name: undo Build DB
         if: env.executeBuild == 'true'
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info undo info -url="${{ env.JDBC }}" -cleanDisabled='false' -target="${{ env.FIRST_UNDO_SCRIPT }}"
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info undo info -url="${{ env.JDBC }}" -cleanDisabled='false' -target="${{ env.FIRST_UNDO_SCRIPT }}"
  
-       # Create a directory to stage the artifact files
+      # Create a directory to stage the artifact files
       - name: Stage files for publishing
         if: env.publishArtifacts == 'true'
         run: |
-          cp -R ${{ GITHUB.WORKSPACE }}/migrations Artifact_Files/Migration/
- 
+          cp -R ${{ github.WORKSPACE }}/migrations Artifact_Files/Migration/
+      # Test for environment specific migrations
+      - name: Set Env for environment specific files
+        run: |
+          echo "env_migrations=$(Test-Path ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} )" >> $env:GITHUB_ENV
       
-      #After migration scripts are validated, publish them as an artifact
+      # Create a directory to stage the environment specific artifact files
+      - name: Stage environment specific files for publishing
+        if: env.publishArtifacts == 'true' && env.env_migrations == 'True'
+        run: |
+          mkdir -force Artifact_Files/Migration-${{ vars.ENV_NAME }}
+          cp -R ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/ || : 
+      
+      # After migration scripts are validated, publish them as an artifact
       - name: Publish Validated Migration Scripts as Artifact
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-build-artifact
           path: Artifact_Files/Migration/
+ 
+      # After environment specific migration scripts are validated, publish them as an artifact
+      - name: Publish Validated Environment Specific Migration Scripts as Artifact
+        if: env.publishArtifacts == 'true' && env.env_migrations == 'True'
+        uses: actions/upload-artifact@v3
+        with: 
+          name: flyway-build-artifact
+          path: Artifact_Files/Migration-${{ vars.ENV_NAME }}/
  
   prod-preparation:
       permissions: write-all
@@ -106,12 +131,17 @@ jobs:
         staticCodeAnalysis: false #Currently not setup in this pipeline
         publishArtifacts: true
         GITHUB_TOKEN: ${{ github.token }}
-        REPORT_FILE: ${{ secrets.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html
-        REPORT_PATH: ${{ GITHUB.WORKSPACE }}\reports\
+        REPORT_FILE: ${{ secrets.databaseName }}-Run-${{ github.RUN_ID }}-Check-Report.html
+        REPORT_PATH: ${{ github.WORKSPACE }}\reports\
         PUBLISH_PATH: https://mtpenguin.github.io/AdvWorksAuto/
  
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
+        - name: Get/Set deployment environment
+          run: |
+            $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+            echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
+            echo "${{ env.deployment_environment }}"
         # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
         - uses: actions/checkout@v3
           
@@ -119,28 +149,33 @@ jobs:
         - name: Create Check Reports
           if: env.generateDriftAndChangeReport == 'true'
           run: |
-            flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ env.REPORT_PATH }}${{ env.REPORT_FILE }}"
+            flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ env.REPORT_PATH }}${{ env.REPORT_FILE }}"
           continue-on-error: false
  
         - name: Publish Check Report as Artifact
-          if: env.publishArtifacts == 'true'
+          if: env.publishArtifacts == 'true' && (${{ failure() }} || ${{ success() }})
           uses: actions/upload-artifact@v3
           with: 
             name: flyway-reports
-            path: ${{ GITHUB.WORKSPACE }}\reports
+            path: ${{ github.WORKSPACE }}\reports
 
         - name: Commit report
+          if: ${{ failure() }} || ${{ success() }}
           run: |
+            git config --global user.name "MTPenguinAction"
+            git config --global user.email "MTPenguinAction@youremail.com"
             git add ${{ env.REPORT_PATH }}
-            git commit -am "Automated report"
+            git commit -am "Automated report here:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
             git push
+        
+        - name: Trigger Deploy
+          if: ${{ failure() }} || ${{ success() }}
+          run: |
+            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f report_file="${{ env.REPORT_FILE }}"
         
         - name: Create Pull Request
           run: |
             gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action.'
             gh pr merge --auto --merge
 
-        - name: Trigger Deploy
-          run: |
-            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f report_file="${{ env.REPORT_FILE }}"
-       
+        

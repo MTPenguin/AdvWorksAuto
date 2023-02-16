@@ -3,6 +3,11 @@ name: DEBUG
 run-name: DEBUG ${{ github.ref }}
 
 on:
+  # Triggers the workflow on push or pull request events but only for branches beginning with 'task' that have changes in the migrations folder.
+  push:
+    branches:
+      - 'debug**'
+
   # Allows you to run this workflow manually from the Actions tab AND from other actions (fwTaskPushCreateCheck)
   workflow_dispatch:
 
@@ -21,11 +26,74 @@ concurrency:
 
 jobs:
   job1:
+    environment: DEBUG_ENVIRONMENT
     env:
       ACTIONS_RUNNER_DEBUG: true 
       GH_TOKEN: ${{ github.token }}
+      GITHUB_CONTEXT: ${{ toJson(github) }}
+      SECRETS_CONTEXT: ${{ toJson(secrets) }}	
+      STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+      MATRIX_CONTEXT: ${{ toJson(matrix) }}	
+      NEEDS_CONTEXT: ${{ toJson(needs) }}
+      
     runs-on: self-hosted
     steps:
+      - name: Echo Contexts
+        run: |
+          echo "$env:GITHUB_CONTEXT"
+          echo "$env:SECRETS_CONTEXT"
+          echo "$env:STRATEGY_CONTEXT"
+          echo "$env:MATRIX_CONTEXT"
+          echo "$env:NEEDS_CONTEXT"
+      
+      
+      - name: Get/Set deployment environment
+        run: |
+          $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+          echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
+      - name: View deployment environment
+        run: |
+          echo "$env:deployment_environment"
+      
+      
+      - name: Set the value
+        id: step_one
+        run: |
+          echo "action_state=yellow" >> $env:GITHUB_ENV
+      - name: Use the value
+        id: step_two
+        run: |
+          echo "${{ env.action_state }}" # This will output 'yellow'
+      
+      # Test Context
+      - name: Echo Context
+        id: echo_context
+        run: |
+          echo "${{ vars.ENV_NAME }}"
+      
+      # Test setting env
+      - name: Set Env
+        run: |
+          echo "dir_exists=$(Test-Path ${{ vars.ENV_NAME }})" >> $env:GITHUB_ENV
+      - name: Set Env 2
+        run: |
+          echo "dir_2=2" >> $env:GITHUB_ENV
+      
+      # Read env 2
+      - name: Read env.dir_2
+        run: |
+          echo ${{ env.dir_2 }}
+      
+      # Read env
+      - name: Read Env
+        run: |
+          echo ${{ env }}
+      
+      # Read env dir_exists
+      - name: Read env.dir_exists
+        run: |
+          echo ${{ env.dir_exists }}
+      
       - name: Checkout
         uses: actions/checkout@v3
 

@@ -32,13 +32,14 @@ jobs:
       # id-token: write
       actions: write
 
-    name: Deploy Production
+    name: Deploy Production On Approval
     # The type of runner that the job will run on
     runs-on: self-hosted
     environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
     if: github.event.review.state == 'approved' #On approval
     env:
       stage: 'Prod'
+      # Used for environment specific migration scripts
       databaseName: ${{ secrets.databaseName}}
       JDBC: ${{ secrets.JDBC }}
       userName: ${{ secrets.userName }}
@@ -47,6 +48,11 @@ jobs:
         
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Get/Set deployment environment
+        run: |
+          $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+          echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
+          echo "${{ env.deployment_environment }}"
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
@@ -57,10 +63,10 @@ jobs:
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
           
       # Trigger Log Workflow On Failure
-      - name: Trigger Run Log Comment On Pull Request
+      - name: Trigger Run Failed Log Comment On Pull Request
         if: ${{ failure() }}
         run: |
           gh workflow run commentLog.yml -r ${{ github.event.pull_request.head.ref }} -f run_id="${{ github.run_id }}" -f repo_name="${{ github.event.repository.full_name }}" -f branch_name="${{ github.event.pull_request.head.ref }}"
