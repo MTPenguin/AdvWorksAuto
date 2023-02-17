@@ -32,3 +32,5 @@ GO
 IF SCHEMA_ID(N'flyway') IS NOT NULL
 DROP SCHEMA [flyway]
 GO
+
+

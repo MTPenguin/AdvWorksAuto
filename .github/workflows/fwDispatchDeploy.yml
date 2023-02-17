@@ -12,8 +12,6 @@ on:
   
 env:
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
-  # If the first undo script is U002, this will validate all undo scripts up to and including that
-  FIRST_UNDO_SCRIPT: ${{ secrets.FIRST_UNDO_SCRIPT }}
   # Enable this for additional debug logging
   ACTIONS_RUNNER_DEBUG: true 
  
@@ -58,7 +56,7 @@ jobs:
 
       - name: Comment Pull Request Pre Deploy
         run: |
-          gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "Starting Flyway Migration Of ${{ github.event.pull_request.head.ref }}"
+          gh pr comment -R ${{ github.event.repository.full_name }} ${{ github.event.pull_request.head.ref }} --body "Starting Flyway migration of ${{ github.event.pull_request.head.ref }} to ${{ env.deployment_environment }}"
 
       # Runs the Flyway Migrate against the Production database
       - name: Migrate Build DB
