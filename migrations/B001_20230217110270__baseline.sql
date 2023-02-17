@@ -8,6 +8,10 @@ IF SCHEMA_ID(N'SalesLT') IS NULL
 EXEC sp_executesql N'CREATE SCHEMA [SalesLT]
 AUTHORIZATION [dbo]'
 GO
+IF SCHEMA_ID(N'flyway') IS NULL
+EXEC sp_executesql N'CREATE SCHEMA [flyway]
+AUTHORIZATION [dbo]'
+GO
 PRINT N'Creating XML schema collections'
 GO
 CREATE XML SCHEMA COLLECTION [SalesLT].[ProductDescriptionSchemaCollection]
@@ -168,6 +172,7 @@ ALTER TABLE [SalesLT].[SalesOrderDetail] ADD CONSTRAINT [AK_SalesOrderDetail_row
 GO
 PRINT N'Creating [dbo].[uspPrintError]'
 GO
+
 -- uspPrintError prints error information about the error that caused 
 -- execution to jump to the CATCH block of a TRY...CATCH construct. 
 -- Should be executed from within the scope of a CATCH block otherwise 
@@ -207,6 +212,7 @@ ALTER TABLE [dbo].[ErrorLog] ADD CONSTRAINT [PK_ErrorLog_ErrorLogID] PRIMARY KEY
 GO
 PRINT N'Creating [dbo].[uspLogError]'
 GO
+
 -- uspLogError logs error information in the ErrorLog table about the 
 -- error that caused execution to jump to the CATCH block of a 
 -- TRY...CATCH construct. This should be executed from within the scope 
@@ -314,6 +320,8 @@ ALTER TABLE [SalesLT].[SalesOrderHeader] ADD CONSTRAINT [AK_SalesOrderHeader_Sal
 GO
 PRINT N'Creating trigger [SalesLT].[iduSalesOrderDetail] on [SalesLT].[SalesOrderDetail]'
 GO
+
+
 CREATE TRIGGER [SalesLT].[iduSalesOrderDetail] ON [SalesLT].[SalesOrderDetail] 
 AFTER INSERT, DELETE, UPDATE AS 
 BEGIN
@@ -355,6 +363,7 @@ END;
 GO
 PRINT N'Creating trigger [SalesLT].[uSalesOrderHeader] on [SalesLT].[SalesOrderHeader]'
 GO
+
 CREATE TRIGGER [SalesLT].[uSalesOrderHeader] ON [SalesLT].[SalesOrderHeader] 
 AFTER UPDATE AS 
 BEGIN
@@ -457,12 +466,10 @@ CREATE TABLE [SalesLT].[Customer]
 [EmailAddress] [nvarchar] (50) NULL,
 [Phone] [dbo].[Phone] NULL,
 [PasswordHash] [varchar] (128) NOT NULL,
-[PasswordSalt] [varchar] (10) NOT NULL,
+[PasswordSalt] [nchar] (10) NULL,
 [rowguid] [uniqueidentifier] NOT NULL ROWGUIDCOL CONSTRAINT [DF_Customer_rowguid] DEFAULT (newid()),
 [ModifiedDate] [datetime] NOT NULL CONSTRAINT [DF_Customer_ModifiedDate] DEFAULT (getdate()),
-[NewColumnAdded] [nvarchar] (50) NULL,
-[NewColumn2] [nchar] (10) NULL,
-[NewColDrift] [nchar] (10) NULL
+[New] [nchar] (10) NULL
 )
 GO
 PRINT N'Creating primary key [PK_Customer_CustomerID] on [SalesLT].[Customer]'
@@ -604,59 +611,10 @@ PRINT N'Adding constraints to [SalesLT].[ProductModelProductDescription]'
 GO
 ALTER TABLE [SalesLT].[ProductModelProductDescription] ADD CONSTRAINT [AK_ProductModelProductDescription_rowguid] UNIQUE NONCLUSTERED ([rowguid])
 GO
-PRINT N'Creating [dbo].[ufnGetCustomerInformation]'
-GO
-CREATE FUNCTION [dbo].[ufnGetCustomerInformation](@CustomerID int)
-RETURNS TABLE 
-AS 
--- Returns the CustomerID, first name, and last name for the specified customer.
-RETURN (
-    SELECT 
-        CustomerID, 
-        FirstName, 
-        LastName
-    FROM [SalesLT].[Customer] 
-    WHERE [CustomerID] = @CustomerID
-);
-GO
-PRINT N'Creating [dbo].[ufnGetAllCategories]'
-GO
--- DROP FUNCTION [dbo].[ufnGetAllCategories]
-
-CREATE FUNCTION [dbo].[ufnGetAllCategories]()
-RETURNS @retCategoryInformation TABLE 
-(
-    -- Columns returned by the function
-    [ParentProductCategoryName] [nvarchar](50) NULL, 
-    [ProductCategoryName] [nvarchar](50) NOT NULL,
-	[ProductCategoryID] [int] NOT NULL
-)
-AS 
--- Returns the CustomerID, first name, and last name for the specified customer.
-BEGIN
-	WITH CategoryCTE([ParentProductCategoryID], [ProductCategoryID], [Name]) AS 
-	(
-		SELECT [ParentProductCategoryID], [ProductCategoryID], [Name]
-		FROM SalesLT.ProductCategory
-		WHERE ParentProductCategoryID IS NULL
-
-	UNION ALL
-
-		SELECT C.[ParentProductCategoryID], C.[ProductCategoryID], C.[Name]
-		FROM SalesLT.ProductCategory AS C
-		INNER JOIN CategoryCTE AS BC ON BC.ProductCategoryID = C.ParentProductCategoryID
-	)
-
-	INSERT INTO @retCategoryInformation
-	SELECT PC.[Name] AS [ParentProductCategoryName], CCTE.[Name] as [ProductCategoryName], CCTE.[ProductCategoryID]  
-	FROM CategoryCTE AS CCTE
-	JOIN SalesLT.ProductCategory AS PC 
-	ON PC.[ProductCategoryID] = CCTE.[ParentProductCategoryID];
-	RETURN;
-END;
-GO
 PRINT N'Creating [SalesLT].[vProductAndDescription]'
 GO
+
+
 CREATE VIEW [SalesLT].[vProductAndDescription] 
 WITH SCHEMABINDING 
 AS 
@@ -681,6 +639,7 @@ CREATE UNIQUE CLUSTERED INDEX [IX_vProductAndDescription] ON [SalesLT].[vProduct
 GO
 PRINT N'Creating [SalesLT].[vProductModelCatalogDescription]'
 GO
+
 CREATE VIEW [SalesLT].[vProductModelCatalogDescription] 
 AS 
 SELECT 
@@ -745,6 +704,7 @@ WHERE [CatalogDescription] IS NOT NULL;
 GO
 PRINT N'Creating [SalesLT].[vGetAllCategories]'
 GO
+
 CREATE VIEW [SalesLT].[vGetAllCategories]
 WITH SCHEMABINDING 
 AS 
@@ -767,9 +727,65 @@ SELECT PC.[Name] AS [ParentProductCategoryName], CCTE.[Name] as [ProductCategory
 FROM CategoryCTE AS CCTE
 JOIN SalesLT.ProductCategory AS PC 
 ON PC.[ProductCategoryID] = CCTE.[ParentProductCategoryID]
+
+GO
+PRINT N'Creating [dbo].[ufnGetCustomerInformation]'
+GO
+
+CREATE FUNCTION [dbo].[ufnGetCustomerInformation](@CustomerID int)
+RETURNS TABLE 
+AS 
+-- Returns the CustomerID, first name, and last name for the specified customer.
+RETURN (
+    SELECT 
+        CustomerID, 
+        FirstName, 
+        LastName
+    FROM [SalesLT].[Customer] 
+    WHERE [CustomerID] = @CustomerID
+);
+GO
+PRINT N'Creating [dbo].[ufnGetAllCategories]'
+GO
+
+-- DROP FUNCTION [dbo].[ufnGetAllCategories]
+
+CREATE FUNCTION [dbo].[ufnGetAllCategories]()
+RETURNS @retCategoryInformation TABLE 
+(
+    -- Columns returned by the function
+    [ParentProductCategoryName] [nvarchar](50) NULL, 
+    [ProductCategoryName] [nvarchar](50) NOT NULL,
+	[ProductCategoryID] [int] NOT NULL
+)
+AS 
+-- Returns the CustomerID, first name, and last name for the specified customer.
+BEGIN
+	WITH CategoryCTE([ParentProductCategoryID], [ProductCategoryID], [Name]) AS 
+	(
+		SELECT [ParentProductCategoryID], [ProductCategoryID], [Name]
+		FROM SalesLT.ProductCategory
+		WHERE ParentProductCategoryID IS NULL
+
+	UNION ALL
+
+		SELECT C.[ParentProductCategoryID], C.[ProductCategoryID], C.[Name]
+		FROM SalesLT.ProductCategory AS C
+		INNER JOIN CategoryCTE AS BC ON BC.ProductCategoryID = C.ParentProductCategoryID
+	)
+
+	INSERT INTO @retCategoryInformation
+	SELECT PC.[Name] AS [ParentProductCategoryName], CCTE.[Name] as [ProductCategoryName], CCTE.[ProductCategoryID]  
+	FROM CategoryCTE AS CCTE
+	JOIN SalesLT.ProductCategory AS PC 
+	ON PC.[ProductCategoryID] = CCTE.[ParentProductCategoryID];
+	RETURN;
+END;
 GO
 PRINT N'Creating [dbo].[ufnGetSalesOrderStatusText]'
 GO
+
+
 CREATE FUNCTION [dbo].[ufnGetSalesOrderStatusText](@Status [tinyint])
 RETURNS [nvarchar](15) 
 AS 
@@ -844,8 +860,6 @@ GO
 ALTER TABLE [SalesLT].[SalesOrderHeader] ADD CONSTRAINT [FK_SalesOrderHeader_Address_BillTo_AddressID] FOREIGN KEY ([BillToAddressID]) REFERENCES [SalesLT].[Address] ([AddressID])
 GO
 ALTER TABLE [SalesLT].[SalesOrderHeader] ADD CONSTRAINT [FK_SalesOrderHeader_Address_ShipTo_AddressID] FOREIGN KEY ([ShipToAddressID]) REFERENCES [SalesLT].[Address] ([AddressID])
-GO
-ALTER TABLE [SalesLT].[SalesOrderHeader] ADD CONSTRAINT [FK_SalesOrderHeader_Customer_CustomerID] FOREIGN KEY ([CustomerID]) REFERENCES [SalesLT].[Customer] ([CustomerID])
 GO
 PRINT N'Adding foreign keys to [SalesLT].[Product]'
 GO
@@ -955,8 +969,6 @@ EXEC sp_addextendedproperty N'MS_Description', N'0 = The data in FirstName and L
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Password for the e-mail account.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'COLUMN', N'PasswordHash'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'Random value concatenated with the password string before the password is hashed.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'COLUMN', N'PasswordSalt'
-GO
 EXEC sp_addextendedproperty N'MS_Description', N'Phone number associated with the person.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'COLUMN', N'Phone'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'COLUMN', N'rowguid'
@@ -969,17 +981,9 @@ EXEC sp_addextendedproperty N'MS_Description', N'A courtesy title. For example, 
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Unique nonclustered constraint. Used to support replication samples.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'AK_Customer_rowguid'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'Default constraint value of GETDATE()', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'DF_Customer_ModifiedDate'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'Default constraint value of 0', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'DF_Customer_NameStyle'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'Default constraint value of NEWID()', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'DF_Customer_rowguid'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'Primary key (clustered) constraint', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'PK_Customer_CustomerID'
+EXEC sp_addextendedproperty N'MS_Description', N'Clustered index created by a primary key constraint.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'PK_Customer_CustomerID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Nonclustered index.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'INDEX', N'IX_Customer_EmailAddress'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'Clustered index created by a primary key constraint.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'INDEX', N'PK_Customer_CustomerID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'High-level product categorization.', 'SCHEMA', N'SalesLT', 'TABLE', N'ProductCategory', NULL, NULL
 GO
@@ -1246,8 +1250,6 @@ GO
 EXEC sp_addextendedproperty N'MS_Description', N'Foreign key constraint referencing Address.AddressID for BillTo.', 'SCHEMA', N'SalesLT', 'TABLE', N'SalesOrderHeader', 'CONSTRAINT', N'FK_SalesOrderHeader_Address_BillTo_AddressID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Foreign key constraint referencing Address.AddressID for ShipTo.', 'SCHEMA', N'SalesLT', 'TABLE', N'SalesOrderHeader', 'CONSTRAINT', N'FK_SalesOrderHeader_Address_ShipTo_AddressID'
-GO
-EXEC sp_addextendedproperty N'MS_Description', N'Foreign key constraint referencing Customer.CustomerID.', 'SCHEMA', N'SalesLT', 'TABLE', N'SalesOrderHeader', 'CONSTRAINT', N'FK_SalesOrderHeader_Customer_CustomerID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Primary key (clustered) constraint', 'SCHEMA', N'SalesLT', 'TABLE', N'SalesOrderHeader', 'CONSTRAINT', N'PK_SalesOrderHeader_SalesOrderID'
 GO
