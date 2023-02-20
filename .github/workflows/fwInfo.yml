@@ -1,0 +1,65 @@
+# This is a workflow to check and create a pull request for db changes
+ 
+name: Flyway Check Pipeline (Self-Hosted)
+run-name: Check ${{ github.head_ref || github.ref_name }}  migration to ${{ github.event.repository.full_name }}/${{ github.event.repository.default_branch }}
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+ 
+env:
+  FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
+  # Enable this for additional debug logging
+  ACTIONS_RUNNER_DEBUG: true
+ 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "info"
+  info:
+    name: Migration Info
+    # The type of runner that the job will run on
+    runs-on: self-hosted
+    environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+    env:
+      stage: 'Info'
+      # Environment Secrets - Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrets > Actions section, specially related to the environment in question) #
+      databaseName: ${{ secrets.databaseName}} 
+      JDBC: ${{ secrets.JDBC }} 
+      userName: ${{ secrets.userName }}
+      password: ${{ secrets.password }}
+      # End of Environment Secrets #
+      displayName: 'Info'
+      publishArtifacts: true
+ 
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Get/Set deployment environment
+        run: |
+          $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+          echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
+          echo "${{ env.deployment_environment }}"
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      # Runs the Flyway info command
+      - name: Clean build db
+        if: env.executeBuild == 'true'
+        run: |
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}"
+        
+      # Create a directory to stage the artifact files
+      # - name: Stage files for publishing
+      #   if: env.publishArtifacts == 'true'
+      #   run: |
+      #     cp -R ${{ github.WORKSPACE }}/migrations Artifact_Files/Migration/
+          
+      # # Publish them as an artifact
+      # - name: Publish validated migration scripts as artifact
+      #   if: env.publishArtifacts == 'true'
+      #   uses: actions/upload-artifact@v3
+      #   with: 
+      #     name: flyway-info-artifact
+      #     path: Artifact_Files/Migration/
+ 
+      
