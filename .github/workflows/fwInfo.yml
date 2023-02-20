@@ -47,11 +47,13 @@ jobs:
       - name: Run Flyway Info command
         run: |
           echo "infoObj=$( flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json )" >> $env:GITHUB_ENV
-          echo "${{ env.infoObj }}"
-          $infoObj = ${{ env.infoObj }} | ConvertFrom-Json
-          echo "$( $infoObj )"
-          echo "${{ env.migrationInfo }}"
-      
+          
+          
+      # echo "${{ env.infoObj }}"
+      # $infoObj = ${{ env.infoObj }} | ConvertFrom-Json
+      # echo "$( $infoObj )"
+      # echo "${{ env.migrationInfo }}"
+  
       - name: Get stages
         run: |
           echo "${{ env.infoObj }}"
