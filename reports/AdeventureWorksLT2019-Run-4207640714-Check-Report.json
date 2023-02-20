@@ -1,0 +1,26 @@
+{
+  "individualResults": [
+    {
+      "onlyInSource": [],
+      "onlyInTarget": [],
+      "differences": [],
+      "database": "AdventureWorksLT2019",
+      "timestamp": "2023-02-17T14:19:38.060491600",
+      "operation": "changes"
+    },
+    {
+      "driftDetected": false,
+      "onlyInSource": [],
+      "onlyInTarget": [],
+      "differences": [],
+      "database": "AdventureWorksLT2019",
+      "timestamp": "2023-02-17T14:19:38.060491600",
+      "operation": "drift"
+    },
+    {
+      "sql": "-- -\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n-- Flyway Dry Run (2023-02-17 14:20:00)\n-- -\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\n\n-- Executing: validate (with callbacks)\n-- ---------------------------------------------------------------------------------------\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\n\n-- Executing: migrate (with callbacks)\n-- ---------------------------------------------------------------------------------------\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\n",
+      "timestamp": "2023-02-17T14:19:38.060491600",
+      "operation": "dryrun"
+    }
+  ]
+}
