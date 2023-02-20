@@ -53,7 +53,7 @@ jobs:
       - name: Expand info results
         run: |
           echo "${{ env.infoObj }}"
-          $infoObj = ${{ env.infoObj }}
+          $infoObj = "" | ${{ env.infoObj }}
           echo "$( $infoObj )"
           echo "migrationsInfo=$( $infoObj | select -expand migrations )" >> $env:GITHUB_ENV
           
