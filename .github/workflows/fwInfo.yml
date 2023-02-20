@@ -49,11 +49,11 @@ jobs:
           echo "infoObj=$( flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json )" >> $env:GITHUB_ENV
           
           
-      # Runs the Flyway info command
-      - name: Run Flyway Info command
+      # Expands info results
+      - name: Expand info results
         run: |
           echo "${{ env.infoObj }}"
-          $infoObj = ${{ env.infoObj }} | ConvertFrom-Json
+          $infoObj = "${{ env.infoObj }}" | ConvertFrom-Json
           echo "$( $infoObj )"
           echo "${{ env.migrationInfo }}"
   
