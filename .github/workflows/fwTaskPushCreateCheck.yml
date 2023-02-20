@@ -25,7 +25,6 @@ env:
  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     name: Deploy Build
     # The type of runner that the job will run on
@@ -54,20 +53,20 @@ jobs:
       - uses: actions/checkout@v3
       
       # Runs the Flyway Clean command against the Build database
-      - name: Clean Build DB
+      - name: Clean build db
         if: env.executeBuild == 'true'
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info clean info -url="${{ env.JDBC }}" -cleanDisabled='false'
         
       # Runs the Flyway Migrate command against the Build database
-      - name: Migrate Build DB
+      - name: Migrate build db
         if: env.executeBuild == 'true'
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
           
       # Runs the Flyway Undo command against the Build database
       # If the first undo script is U002, this will validate all undo scripts up to and including that
-      - name: undo Build DB
+      - name: Undo build db
         if: env.executeBuild == 'true'
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info undo info -url="${{ env.JDBC }}" -cleanDisabled='false' -target="${{ vars.FIRST_UNDO_SCRIPT }}"
@@ -77,6 +76,7 @@ jobs:
         if: env.publishArtifacts == 'true'
         run: |
           cp -R ${{ github.WORKSPACE }}/migrations Artifact_Files/Migration/
+          
       # Test for environment specific migrations
       - name: Set Env for environment specific files
         run: |
@@ -90,7 +90,7 @@ jobs:
           cp -R ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/ || : 
       
       # After migration scripts are validated, publish them as an artifact
-      - name: Publish Validated Migration Scripts as Artifact
+      - name: Publish validated migration scripts as artifact
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
@@ -98,7 +98,7 @@ jobs:
           path: Artifact_Files/Migration/
  
       # After environment specific migration scripts are validated, publish them as an artifact
-      - name: Publish Validated Environment Specific Migration Scripts as Artifact
+      - name: Publish validated environment specific migration scripts as artifact
         if: env.publishArtifacts == 'true' && env.env_migrations == 'True'
         uses: actions/upload-artifact@v3
         with: 
@@ -107,7 +107,7 @@ jobs:
  
   prod-preparation:
       permissions: write-all
-      name: Production Deployment Preparation - Report Creation
+      name: Production deployment preparation - report creation
       # The type of runner that the job will run on
       runs-on: self-hosted
       environment: 'prod-check' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured
@@ -145,13 +145,13 @@ jobs:
         - uses: actions/checkout@v3
           
         # Runs the Flyway Check command, to produce a deployment report, against the Production database
-        - name: Create Check Reports
+        - name: Create check reports
           if: env.generateDriftAndChangeReport == 'true'
           run: |
             flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ env.REPORT_PATH }}${{ env.REPORT_FILE }}"
           continue-on-error: false
  
-        - name: Publish Check Report as Artifact
+        - name: Publish check report as artifact
           if: env.publishArtifacts == 'true' && (${{ failure() }} || ${{ success() }})
           uses: actions/upload-artifact@v3
           with: 
@@ -167,12 +167,12 @@ jobs:
             git commit -am "Automated report here:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
             git push
         
-        - name: Trigger Check Report Deploy
+        - name: Trigger check report workflow
           if: ${{ failure() }} || ${{ success() }}
           run: |
             gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f report_file="${{ env.REPORT_FILE }}"
         
-        - name: Create ${{ env.branch_name }} Pull Request
+        - name: Create ${{ env.branch_name }} pull request
           run: |
             gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action.'
             gh pr merge --auto --merge
