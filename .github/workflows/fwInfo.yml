@@ -53,13 +53,14 @@ jobs:
       - name: Expand info results
         run: |
           echo "${{ env.infoObj }}"
-          $infoObj = "${{ env.infoObj }}" | ConvertFrom-Json
+          $infoObj = ConvertFrom-Json -InputObject "${{ env.infoObj }}"
           echo "$( $infoObj )"
-          echo "${{ env.migrationInfo }}"
-  
+          echo "migrationsInfo=$( $infoObj | select -expand migrations )" >> $env:GITHUB_ENV
+          
       - name: Get stages
         run: |
-          echo "${{ env.infoObj }}"
+          echo "${{ env.migrationInfo }}"
+          
           
       # Create a directory to stage the artifact files
       # - name: Stage files for publishing
