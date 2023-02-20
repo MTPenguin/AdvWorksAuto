@@ -50,6 +50,12 @@ jobs:
       - name: Cat info.json
         run: |
           cat info.json
+
+      - name: Get stages
+        run: |
+          $info = cat info.json
+          $infoObj = ConvertFrom-Json -InputObject $info
+          $infoObj.stage
           
       # Create a directory to stage the artifact files
       # - name: Stage files for publishing
