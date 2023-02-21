@@ -47,8 +47,9 @@ jobs:
       - name: Run Flyway Info command
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > info.json
-          echo "infoObj=$( cat info.json )" >> $env:GITHUB_ENV
-          
+          $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
+          echo "$( $infoObj )"
+          echo "migrationsInfo=$( $infoObj | select -expand migrations )" >> $env:GITHUB_ENV
           
       # Expands info results
       - name: Expand info results
