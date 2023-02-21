@@ -50,7 +50,7 @@ jobs:
           $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
           cat info.json
           echo "$( $infoObj )"
-          $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending"
+          $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
           echo "$( $pending.count )"
           
