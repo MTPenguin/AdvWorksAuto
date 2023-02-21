@@ -51,14 +51,6 @@ jobs:
           echo "$( $infoObj )"
           echo "migrationsInfo=$( $infoObj | select -expand migrations )" >> $env:GITHUB_ENV
           
-      # Expands info results
-      - name: Expand info results
-        run: |
-          echo "${{ env.infoObj }}"
-          $infoObj = ConvertFrom-Json -InputObject "${{ env.infoObj }}"
-          echo "$( $infoObj )"
-          echo "migrationsInfo=$( $infoObj | select -expand migrations )" >> $env:GITHUB_ENV
-          
       - name: Get stages
         run: |
           echo "${{ env.migrationInfo }}"
