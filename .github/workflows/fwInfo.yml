@@ -53,7 +53,7 @@ jobs:
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
           echo "$( $pending.count )"
-          echo "pendingMigrations=$( $pending.count == 0)" > $env:GITHUB_ENV
+          echo "pendingMigrations=$( $pending.count eq 0)" > $env:GITHUB_ENV
           
       - name: Echo pending migrations
         run: |
