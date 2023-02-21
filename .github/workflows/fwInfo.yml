@@ -59,17 +59,11 @@ jobs:
         run: |
           echo "${{ env.pendingMigrations }}"
                    
-      # Create a directory to stage the artifact files
-      - name: Stage files for publishing
-        if: env.publishArtifacts == 'true'
-        run: |
-          cp ${{ github.WORKSPACE }}/info.json Artifact_Files/
-          
       # Publish them as an artifact
       - name: Publish validated migration scripts as artifact
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-info-artifact
-          path: Artifact_Files/info.json
+          path: ${{ github.WORKSPACE }}\info.json
       
