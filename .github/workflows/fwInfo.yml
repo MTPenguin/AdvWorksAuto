@@ -53,10 +53,11 @@ jobs:
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
           echo "$( $pending.count )"
+          echo "pendingMigrations=$( $pending.count == 0)" > $env:GITHUB_ENV
           
-      - name: Get stages
+      - name: Echo pending migrations
         run: |
-          echo "${{ env.migrationInfo }}"
+          echo "${{ env.pendingMigrations }}"
           
           
       # Create a directory to stage the artifact files
