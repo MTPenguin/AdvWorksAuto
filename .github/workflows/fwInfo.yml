@@ -50,8 +50,8 @@ jobs:
           $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
           cat info.json
           echo "$( $infoObj )"
-          echo "$( $infoObj | select -expand migrations )"
-          echo "migrationsInfo=$( $infoObj | select -expand migrations )" >> $env:GITHUB_ENV
+          echo "$( $infoObj | select -expand migrations | Out-String )"
+          echo "migrationsInfo=$( $infoObj | select -expand migrations | Out-String )" >> $env:GITHUB_ENV
           
       - name: Get stages
         run: |
