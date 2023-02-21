@@ -50,8 +50,9 @@ jobs:
           $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
           cat info.json
           echo "$( $infoObj )"
-          echo "$( $infoObj | select -expand migrations | Out-String )"
-          echo "migrationsInfo=$( $infoObj | select -expand migrations | Out-String )" >> $env:GITHUB_ENV
+          $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending"
+          echo "$( $pending )"
+          echo "$( $pending.count )"
           
       - name: Get stages
         run: |
