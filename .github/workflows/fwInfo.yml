@@ -63,7 +63,7 @@ jobs:
       - name: Stage files for publishing
         if: env.publishArtifacts == 'true'
         run: |
-          cp -R ${{ github.WORKSPACE }}/info.json Artifact_Files/
+          cp ${{ github.WORKSPACE }}/info.json Artifact_Files/
           
       # Publish them as an artifact
       - name: Publish validated migration scripts as artifact
