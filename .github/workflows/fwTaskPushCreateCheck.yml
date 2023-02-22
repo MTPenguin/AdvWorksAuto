@@ -27,7 +27,7 @@ env:
   INFO_FILEPATH: "./info.json"
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
   actions: write
   repository-projects: write
