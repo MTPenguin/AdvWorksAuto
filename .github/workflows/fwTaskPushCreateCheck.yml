@@ -30,7 +30,7 @@ permissions:
   contents: write
   pull-requests: write
   actions: write
-  # repository-projects: write
+  id-token: write
 
 # Allow one concurrent deployment
 concurrency:
