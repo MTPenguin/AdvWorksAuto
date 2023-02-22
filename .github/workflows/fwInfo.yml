@@ -12,7 +12,7 @@ env:
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
   # Enable this for additional debug logging
   ACTIONS_RUNNER_DEBUG: true
-  INFO_FILEPATH: "./info.json"
+  INFO_FILE: "info.json"
  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -50,9 +50,9 @@ jobs:
       - name: Run Flyway Info command
         id: checkStates
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILEPATH }}
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILE }}
           $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
-          cat ${{ env.INFO_FILEPATH }}
+          cat ${{ env.INFO_FILE }}
           echo "$( $infoObj )"
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
@@ -69,5 +69,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-info-artifact
-          path: ${{ github.WORKSPACE }}\${{ env.INFO_FILEPATH }}
+          path: ${{ github.WORKSPACE }}\${{ env.INFO_FILE }}
       
