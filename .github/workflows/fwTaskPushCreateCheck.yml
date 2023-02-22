@@ -34,7 +34,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: "${{ github.head_ref || github.ref_name }})_CHECK"
+  group: "${{ github.head_ref || github.ref_name }}_CHECK"
   cancel-in-progress: true
 
             
