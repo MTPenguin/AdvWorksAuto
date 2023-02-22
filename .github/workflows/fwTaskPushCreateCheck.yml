@@ -85,6 +85,14 @@ jobs:
         run: |
           echo "${{ steps.checkStates.outputs.pendingMigrations }}"
                    
+      # Publish as an artifact
+      - name: Publish migration information json as artifact
+        if: env.publishArtifacts == 'true'
+        uses: actions/upload-artifact@v3
+        with: 
+          name: flyway-info-artifact
+          path: ${{ github.WORKSPACE }}\${{ env.INFO_FILE }}
+      
       - name: Commit and comment if nothing to do
         if: ${{ steps.checkStates.outputs.pendingMigrations == 'False' }}
         run: |
@@ -93,15 +101,9 @@ jobs:
           git add ${{ env.INFO_FILE }}
           git commit -am "No pending migrations found"
           git push
+          exit 1
                    
-      # Publish as an artifact
-      - name: Publish migration information json as artifact
-        if: env.publishArtifacts == 'true'
-        uses: actions/upload-artifact@v3
-        with: 
-          name: flyway-info-artifact
-          path: ${{ github.WORKSPACE }}\${{ env.INFO_FILE }}
-
+        
   
   build:
     name: Deploy Build
@@ -205,7 +207,6 @@ jobs:
         # End of Environment Secrets #
         generateDriftAndChangeReport: true
         failReleaseIfDriftDetected: false
-        staticCodeAnalysis: false #Currently not setup in this pipeline
         publishArtifacts: true
         GITHUB_TOKEN: ${{ github.token }}
         REPORT_FILE: ${{ secrets.databaseName }}-Run-${{ github.RUN_ID }}-Check-Report.html

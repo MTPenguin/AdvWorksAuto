@@ -32,7 +32,6 @@ jobs:
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
       # End of Environment Secrets #
-      displayName: 'Info'
       publishArtifacts: true
  
     # Steps represent a sequence of tasks that will be executed as part of the job
