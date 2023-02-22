@@ -11,12 +11,21 @@ on:
   # Allows you to run this workflow manually from the Actions tab AND from other actions (fwTaskPushCreateCheck)
   workflow_dispatch:
 
-
+# permissions:
+#   actions: read|write|none
+#   checks: read|write|none
+#   contents: read|write|none
+#   deployments: read|write|none
+#   issues: read|write|none
+#   packages: read|write|none
+#   pull-requests: read|write|none
+#   repository-projects: read|write|none
+#   security-events: read|write|none
+#   statuses: read|write|none
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pull-requests: write
-  id-token: write
   actions: write
 
 # Allow one concurrent deployment

@@ -25,6 +25,17 @@ env:
   ACTION_EMAIL: "MTPenguinAction@youremail.com"
   ACTION_USER: "MTPenguinAction"
   INFO_FILEPATH: "./info.json"
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "${{ github.head_ref || github.ref_name }})_CHECK"
+  cancel-in-progress: true
+
             
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -174,7 +185,6 @@ jobs:
           path: Artifact_Files/Migration-${{ vars.ENV_NAME }}/
  
   prod-preparation:
-      permissions: write-all
       name: Production deployment preparation - report creation
       # The type of runner that the job will run on
       runs-on: self-hosted
