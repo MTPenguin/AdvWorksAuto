@@ -87,7 +87,7 @@ jobs:
           echo "${{ steps.checkStates.outputs.pendingMigrations }}"
                    
       - name: Commit and comment if nothing to do
-        if: ${{ needs.info.outputs.pendingMigrations == 'False' }}
+        if: ${{ steps.checkStates.outputs.pendingMigrations == 'False' }}
         run: |
           git config --global user.name "${{ env.ACTION_USER }}"
           git config --global user.email "${{ env.ACTION_EMAIL }}"
