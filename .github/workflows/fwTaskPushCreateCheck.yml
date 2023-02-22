@@ -101,7 +101,7 @@ jobs:
           git add ${{ env.INFO_FILE }}
           git commit -am "No pending migrations found"
           git push
-          echo "::error::NOTHING to do!" && exit 1
+          echo "::error::NOTHING to do!" | exit 1
                    
         
   
