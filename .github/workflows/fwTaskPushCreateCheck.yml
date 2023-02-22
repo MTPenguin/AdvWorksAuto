@@ -22,7 +22,10 @@ env:
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
   # Enable this for additional debug logging
   ACTIONS_RUNNER_DEBUG: true
- 
+  ACTION_EMAIL: "MTPenguinAction@youremail.com"
+  ACTION_USER: "MTPenguinAction"
+  INFO_FILEPATH: "./info.json"
+            
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   info:
@@ -58,9 +61,9 @@ jobs:
       - name: Run Flyway info command
         id: checkStates
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > info.json
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILEPATH }}
           $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
-          cat info.json
+          cat ${{ env.INFO_FILEPATH }}
           echo "$( $infoObj )"
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
@@ -71,13 +74,22 @@ jobs:
         run: |
           echo "${{ steps.checkStates.outputs.pendingMigrations }}"
                    
+      - name: Comment if nothing to do
+        run: |
+          git config --global user.name "${{ env.ACTION_USER }}"
+          git config --global user.email "${{ env.ACTION_EMAIL }}"
+          git add ${{ env.INFO_FILEPATH }}
+          git commit -am "Automated report here:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
+          git push
+                   
       # Publish them as an artifact
       - name: Publish validated migration scripts as artifact
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-info-artifact
-          path: ${{ github.WORKSPACE }}\info.json
+          path: ${{ github.WORKSPACE }}\${{ env.INFO_FILEPATH }}
+
   
   build:
     name: Deploy Build
@@ -217,8 +229,8 @@ jobs:
         - name: Commit report
           if: ${{ failure() }} || ${{ success() }}
           run: |
-            git config --global user.name "MTPenguinAction"
-            git config --global user.email "MTPenguinAction@youremail.com"
+            git config --global user.name "${{ env.ACTION_USER }}"
+            git config --global user.email "${{ env.ACTION_EMAIL }}"
             git add ${{ env.REPORT_PATH }}
             git commit -am "Automated report here:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
             git push
