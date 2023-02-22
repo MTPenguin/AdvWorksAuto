@@ -27,7 +27,6 @@ jobs:
     permissions:
       # contents: read
       pull-requests: write
-      # id-token: write
       actions: write
 
     name: Deploy Production On Approval

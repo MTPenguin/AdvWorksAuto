@@ -22,7 +22,22 @@ env:
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
   # Enable this for additional debug logging
   ACTIONS_RUNNER_DEBUG: true
- 
+  ACTION_EMAIL: "MTPenguinAction@youremail.com"
+  ACTION_USER: "MTPenguinAction"
+  INFO_FILE: "info.json"
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "${{ github.head_ref || github.ref_name }}_CHECK"
+  cancel-in-progress: true
+
+            
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   info:
@@ -40,7 +55,6 @@ jobs:
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
       # End of Environment Secrets #
-      displayName: 'Info'
       publishArtifacts: true
  
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -58,9 +72,9 @@ jobs:
       - name: Run Flyway info command
         id: checkStates
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > info.json
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILE }}
           $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
-          cat info.json
+          cat ${{ env.INFO_FILE }}
           echo "$( $infoObj )"
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
@@ -71,13 +85,23 @@ jobs:
         run: |
           echo "${{ steps.checkStates.outputs.pendingMigrations }}"
                    
-      # Publish them as an artifact
-      - name: Publish validated migration scripts as artifact
+      - name: Commit and comment if nothing to do
+        if: ${{ steps.checkStates.outputs.pendingMigrations == 'False' }}
+        run: |
+          git config --global user.name "${{ env.ACTION_USER }}"
+          git config --global user.email "${{ env.ACTION_EMAIL }}"
+          git add ${{ env.INFO_FILE }}
+          git commit -am "No pending migrations found"
+          git push
+                   
+      # Publish as an artifact
+      - name: Publish migration information json as artifact
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-info-artifact
-          path: ${{ github.WORKSPACE }}\info.json
+          path: ${{ github.WORKSPACE }}\${{ env.INFO_FILE }}
+
   
   build:
     name: Deploy Build
@@ -94,7 +118,6 @@ jobs:
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
       # End of Environment Secrets #
-      displayName: 'Build'
       executeBuild: true
       publishArtifacts: true
  
@@ -162,7 +185,6 @@ jobs:
           path: Artifact_Files/Migration-${{ vars.ENV_NAME }}/
  
   prod-preparation:
-      permissions: write-all
       name: Production deployment preparation - report creation
       # The type of runner that the job will run on
       runs-on: self-hosted
@@ -200,7 +222,7 @@ jobs:
         # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
         - uses: actions/checkout@v3
           
-        # Runs the Flyway Check command, to produce a deployment report, against the Production database
+        # Runs the Flyway Check command, to produce a deployment report, against the production database
         - name: Create check reports
           if: env.generateDriftAndChangeReport == 'true'
           run: |
@@ -214,23 +236,25 @@ jobs:
             name: flyway-reports
             path: ${{ github.WORKSPACE }}\reports
 
+        # Commit report to GitHub and put pages URL in commit message
         - name: Commit report
           if: ${{ failure() }} || ${{ success() }}
           run: |
-            git config --global user.name "MTPenguinAction"
-            git config --global user.email "MTPenguinAction@youremail.com"
+            git config --global user.name "${{ env.ACTION_USER }}"
+            git config --global user.email "${{ env.ACTION_EMAIL }}"
             git add ${{ env.REPORT_PATH }}
-            git commit -am "Automated report here:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
+            git commit -am "Flyway check report URL:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
             git push
-        
-        - name: Trigger check report workflow
-          if: ${{ failure() }} || ${{ success() }}
-          run: |
-            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f report_file="${{ env.REPORT_FILE }}"
         
         - name: Create ${{ env.branch_name }} pull request
           run: |
             gh pr create -B main -H "${{ env.branch_name }}" --title 'Merge ${{ env.branch_name }} into main' --body 'Created by Github action.'
             gh pr merge --auto --merge
 
+        # Trigger workflow to publish report to GitHub pages and try to comment on P.R. (if exists)
+        - name: Trigger check report to GitHub pages workflow
+          if: ${{ failure() }} || ${{ success() }}
+          run: |
+            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f report_file="${{ env.REPORT_FILE }}"
+        
         
