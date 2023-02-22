@@ -16,6 +16,9 @@ on:
         default: '?'
 
 
+env:
+  INFO_FILE: "info.json"
+
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -52,4 +55,6 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{ github.token }} 
         run: |
+          gh pr comment --body "FLYWAY migration information: $(cat ${{ env.INFO_FILE }})"
           gh pr comment --body "FLYWAY Check Report can be found here:${{ inputs.report_path }}${{ inputs.report_file }}"
+          
