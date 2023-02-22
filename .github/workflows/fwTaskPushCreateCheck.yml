@@ -69,7 +69,7 @@ jobs:
           
       - name: Echo pending migrations
         run: |
-          echo "${{ env.pendingMigrations }}"
+          echo "${{ steps.checkStates.outputs.pendingMigrations }}"
                    
       # Publish them as an artifact
       - name: Publish validated migration scripts as artifact
