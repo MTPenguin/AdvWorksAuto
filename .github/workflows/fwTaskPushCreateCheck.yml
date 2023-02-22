@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v3
       
       # Runs the Flyway info command
-      - name: Run Flyway Info command
+      - name: Run Flyway info command
         id: checkStates
         run: |
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > info.json
