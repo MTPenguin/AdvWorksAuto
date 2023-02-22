@@ -25,11 +25,67 @@ env:
  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  info:
+    name: Migration Info
+    # The type of runner that the job will run on
+    runs-on: self-hosted
+    environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured
+    outputs:
+      pendingMigrations: ${{ steps.checkStates.outputs.pendingMigrations }}
+    env:
+      stage: 'Info'
+      # Environment Secrets - Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrets > Actions section, specially related to the environment in question) #
+      databaseName: ${{ secrets.databaseName}} 
+      JDBC: ${{ secrets.JDBC }} 
+      userName: ${{ secrets.userName }}
+      password: ${{ secrets.password }}
+      # End of Environment Secrets #
+      displayName: 'Info'
+      publishArtifacts: true
+ 
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Get/Set deployment environment
+        run: |
+          $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+          echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
+          echo "${{ env.deployment_environment }}"
+      
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      # Runs the Flyway info command
+      - name: Run Flyway info command
+        id: checkStates
+        run: |
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > info.json
+          $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
+          cat info.json
+          echo "$( $infoObj )"
+          $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
+          echo "$( $pending )"
+          echo "$( $pending.count )"
+          echo "pendingMigrations=$( $pending.count -ne 0)" > $env:GITHUB_OUTPUT
+          
+      - name: Echo pending migrations
+        run: |
+          echo "${{ steps.checkStates.outputs.pendingMigrations }}"
+                   
+      # Publish them as an artifact
+      - name: Publish validated migration scripts as artifact
+        if: env.publishArtifacts == 'true'
+        uses: actions/upload-artifact@v3
+        with: 
+          name: flyway-info-artifact
+          path: ${{ github.WORKSPACE }}\info.json
+  
   build:
     name: Deploy Build
     # The type of runner that the job will run on
     runs-on: self-hosted
     environment: 'build' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+    needs: info
+    if: ${{ needs.info.outputs.pendingMigrations == 'True' }}
     env:
       stage: 'Build'
       # Environment Secrets - Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrets > Actions section, specially related to the environment in question) #
