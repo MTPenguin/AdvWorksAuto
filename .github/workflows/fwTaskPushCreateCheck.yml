@@ -95,8 +95,8 @@ jobs:
           git commit -am "No pending migrations found"
           git push
                    
-      # Publish them as an artifact
-      - name: Publish validated migration scripts as artifact
+      # Publish as an artifact
+      - name: Publish migration information json as artifact
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
