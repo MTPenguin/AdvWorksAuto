@@ -258,6 +258,7 @@ jobs:
             git config --global user.email "${{ env.ACTION_EMAIL }}"
             git add ${{ env.REPORT_PATH }}
             git commit -am "Flyway check report URL:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
+            git pull
             git push
         
         - name: Create ${{ env.branch_name }} pull request
