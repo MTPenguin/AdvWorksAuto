@@ -272,6 +272,6 @@ jobs:
         - name: Trigger check report to GitHub pages workflow
           if: ${{ failure() }} || ${{ success() }}
           run: |
-            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f report_file="${{ env.REPORT_FILE }}"
+            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f check_file="${{ env.REPORT_FILE }}" -f info_file="${{ env.INFO_FILENAME }}.txt"
         
         

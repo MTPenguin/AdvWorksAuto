@@ -1,6 +1,6 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy Flyway Check Report To Github Pages
-run-name: Deploy ${{ inputs.report_file }}
+run-name: Deploy ${{ inputs.check_file }}
 
 on:
   # Allows you to run this workflow manually from the Actions tab AND from other actions (fwTaskPushCreateCheck)
@@ -10,11 +10,15 @@ on:
         description: 'Report Path'
         required: false
         default: '?'
-      report_file:
-        description: 'Report File'
+      check_file:
+        description: 'Check File'
         required: false
         default: '?'
-
+      info_file:
+        description: 'Info File'
+        required: false
+        default: '?'
+      
 
 env:
   INFO_FILENAME: "info"
@@ -56,6 +60,6 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{ github.token }} 
         run: |
-          gh pr comment --body-file "${{ env.INFO_FILENAME }}.txt"
-          gh pr comment --body "FLYWAY Check Report can be found here:${{ inputs.report_path }}${{ inputs.report_file }}"
+          gh pr comment --body-file "${{ inputs.info_file }}"
+          gh pr comment --body "FLYWAY Check Report can be found here:${{ inputs.report_path }}${{ inputs.check_file }}"
           
