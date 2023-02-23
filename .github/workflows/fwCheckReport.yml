@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: ${{ env.REPORT_PATH }}
+          path: './reports'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
@@ -61,6 +61,6 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{ github.token }} 
         run: |
-          gh pr comment --body-file "${{ env.REPORT_PATH }}${{ inputs.info_file }}"
+          gh pr comment --body-file "'./reports'/${{ inputs.info_file }}"
           gh pr comment --body "FLYWAY Check Report can be found here:${{ inputs.report_path }}${{ inputs.check_file }}"
           
