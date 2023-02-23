@@ -1,3 +1,4 @@
+FLYWAY migration information:\n
 
 category  version            description           type         installedOnUTC       state    undoable filepath
 --------  -------            -----------           ----         --------------       -----    -------- --------         
