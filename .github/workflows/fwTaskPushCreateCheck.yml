@@ -24,6 +24,8 @@ env:
   ACTIONS_RUNNER_DEBUG: true
   ACTION_EMAIL: "MTPenguinAction@youremail.com"
   ACTION_USER: "MTPenguinAction"
+  REPORT_PATH: ${{ github.WORKSPACE }}\reports\
+  PUBLISH_PATH: https://mtpenguin.github.io/AdvWorksAuto/
   INFO_FILENAME: "info"
 
 permissions:
@@ -225,8 +227,6 @@ jobs:
         publishArtifacts: true
         GITHUB_TOKEN: ${{ github.token }}
         REPORT_FILE: ${{ secrets.databaseName }}-Run-${{ github.RUN_ID }}-Check-Report.html
-        REPORT_PATH: ${{ github.WORKSPACE }}\reports\
-        PUBLISH_PATH: https://mtpenguin.github.io/AdvWorksAuto/
  
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
