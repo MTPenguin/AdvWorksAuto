@@ -82,6 +82,12 @@ jobs:
           echo "$( $pending.count )"
           echo "pendingMigrations=$( $pending.count -ne 0)" > $env:GITHUB_OUTPUT
           
+      - name: Add info files to repo
+        run: |
+          git config --global user.name "${{ env.ACTION_USER }}"
+          git config --global user.email "${{ env.ACTION_EMAIL }}"
+          git add ${{ env.INFO_FILENAME }}.*
+          
       - name: Echo pending migrations
         run: |
           echo "${{ steps.checkStates.outputs.pendingMigrations }}"
@@ -96,12 +102,15 @@ jobs:
             ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.txt
             ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.json
           
-      - name: Commit and comment if nothing to do
+      - name: Commit info files and comment current migrations
+        if: ${{ steps.checkStates.outputs.pendingMigrations == 'True' }}
+        run: |
+          git commit -am "Add migration info files"
+          git push
+                   
+      - name: Commit info files and comment NOTHING to do!
         if: ${{ steps.checkStates.outputs.pendingMigrations == 'False' }}
         run: |
-          git config --global user.name "${{ env.ACTION_USER }}"
-          git config --global user.email "${{ env.ACTION_EMAIL }}"
-          git add ${{ env.INFO_FILENAME }}.json
           git commit -am "No pending migrations found"
           git push
           echo "::error::NOTHING to do!"; exit 1
