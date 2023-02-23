@@ -56,6 +56,6 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{ github.token }} 
         run: |
-          gh pr comment --body-file "{{ env.INFO_FILENAME }}.txt"
+          gh pr comment --body-file ${{ env.INFO_FILENAME }}.txt"
           gh pr comment --body "FLYWAY Check Report can be found here:${{ inputs.report_path }}${{ inputs.report_file }}"
           
