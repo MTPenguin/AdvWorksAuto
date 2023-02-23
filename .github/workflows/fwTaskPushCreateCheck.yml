@@ -76,7 +76,8 @@ jobs:
           $infoObj = Get-Content -Raw -Path ${{ env.INFO_FILENAME }}.json | ConvertFrom-Json
           cat ${{ env.INFO_FILENAME }}.json
           echo "$( $infoObj.migrations )"
-          $infoObj.migrations | Format-Table > ${{ env.INFO_FILENAME }}.txt
+          echo "FLYWAY migration information:\n" > ${{ env.INFO_FILENAME }}.txt
+          $infoObj.migrations | Format-Table >> ${{ env.INFO_FILENAME }}.txt
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
           echo "$( $pending.count )"
