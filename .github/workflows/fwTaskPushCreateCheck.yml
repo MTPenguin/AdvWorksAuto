@@ -75,7 +75,7 @@ jobs:
           flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILENAME }}.json
           $infoObj = Get-Content -Raw -Path ${{ env.INFO_FILENAME }}.json | ConvertFrom-Json
           cat ${{ env.INFO_FILENAME }}.json
-          echo "FLYWAY migration information:\n" > ${{ env.INFO_FILENAME }}.txt
+          echo "FLYWAY migration information:" > ${{ env.INFO_FILENAME }}.txt
           $infoObj.migrations | Format-Table >> ${{ env.INFO_FILENAME }}.txt
           cat ${{ env.INFO_FILENAME }}.txt
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
