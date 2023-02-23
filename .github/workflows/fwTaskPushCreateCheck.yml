@@ -68,7 +68,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
-      # Runs the Flyway info command
+      # Runs the Flyway info command ([ ` ] "tick" character IS escape character)
       - name: Run Flyway info command
         id: checkStates
         run: |
@@ -76,9 +76,9 @@ jobs:
           $infoObj = Get-Content -Raw -Path ${{ env.INFO_FILENAME }}.json | ConvertFrom-Json
           cat ${{ env.INFO_FILENAME }}.json
           echo "FLYWAY migration information:" > ${{ env.INFO_FILENAME }}.txt
-          echo "```" >> ${{ env.INFO_FILENAME }}.txt
+          echo `````` >> ${{ env.INFO_FILENAME }}.txt
           $infoObj.migrations | Format-Table >> ${{ env.INFO_FILENAME }}.txt
-          echo "```" >> ${{ env.INFO_FILENAME }}.txt
+          echo `````` >> ${{ env.INFO_FILENAME }}.txt
           cat ${{ env.INFO_FILENAME }}.txt
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
