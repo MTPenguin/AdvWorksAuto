@@ -1,7 +1,7 @@
 # This is a workflow to check and create a pull request for db changes
  
 name: Flyway Check Pipeline (Self-Hosted)
-run-name: Check ${{ github.head_ref || github.ref_name }} migration to ${{ github.event.repository.full_name }}/${{ github.event.repository.default_branch }}
+run-name: Check ${{ github.head_ref || github.ref_name }} migration to ${{ github.event.repository.default_branch }} # ${{ github.event.repository.full_name }}/${{ github.event.repository.default_branch }}
 
 # Controls when the workflow will run
 on:
@@ -226,7 +226,7 @@ jobs:
         failReleaseIfDriftDetected: false
         publishArtifacts: true
         GITHUB_TOKEN: ${{ github.token }}
-        REPORT_FILE: ${{ secrets.databaseName }}-Run-${{ github.RUN_ID }}-Check-Report.html
+        REPORT_FILE: ${{ github.RUN_ID }}-${{ secrets.databaseName }}-Check-Report.html
  
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
