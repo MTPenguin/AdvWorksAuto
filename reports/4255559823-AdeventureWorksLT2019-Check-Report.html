@@ -97,15 +97,15 @@ details>details {
 <div class="dropdown" style="float: right; clear: both; margin-top: 50px">
 <label for="dropdown">Report generated:</label>
 <select onchange="onTimestampClick(event, this.value)" id="dropdown">
-<option value="2023-02-23 08:25:13" selected="true">2023-02-23 08:25:13</option>
+<option value="2023-02-23 11:12:35" selected="true">2023-02-23 11:12:35</option>
 </select>
 </div>
-<div class="page 2023-02-23 08:25:13">
+<div class="page 2023-02-23 11:12:35">
 <div class="tabs">
-<button class="tab" onclick="onTabClick(event, 'Changereport2023-02-2308:25:13')"><h4>Change report</h4></button>
-<button class="tab" onclick="onTabClick(event, 'Driftreport2023-02-2308:25:13')"><h4>Drift report</h4></button>
-<button class="tab" onclick="onTabClick(event, 'Dryrun2023-02-2308:25:13')" id="open-2023-02-23 08:25:13"><h4>Dry run</h4></button>
-</div><div id="Changereport2023-02-2308:25:13" class="tabcontent">
+<button class="tab" onclick="onTabClick(event, 'Changereport2023-02-2311:12:35')"><h4>Change report</h4></button>
+<button class="tab" onclick="onTabClick(event, 'Driftreport2023-02-2311:12:35')"><h4>Drift report</h4></button>
+<button class="tab" onclick="onTabClick(event, 'Dryrun2023-02-2311:12:35')" id="open-2023-02-23 11:12:35"><h4>Dry run</h4></button>
+</div><div id="Changereport2023-02-2311:12:35" class="tabcontent">
 <div style="display: flex; justify-content: left;">
 <h1>Change report&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: normal; font-size: 16px">Database: AdventureWorksLT2019</span></h1>
 </div>
@@ -116,7 +116,7 @@ details>details {
 <div style="width: 700px; background-color: #F2F2F2; margin: 100px auto; padding: 10px 0px">
 <h2 style="text-align: center;">No report to show: your database is in sync</h2>
 </div></div>
-<div id="Driftreport2023-02-2308:25:13" class="tabcontent">
+<div id="Driftreport2023-02-2311:12:35" class="tabcontent">
 <div style="display: flex; justify-content: left;">
 <h1>Drift report&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: normal; font-size: 16px">Database: AdventureWorksLT2019</span></h1>
 </div>
@@ -127,12 +127,12 @@ details>details {
 <div style="width: 700px; background-color: #F2F2F2; margin: 100px auto; padding: 10px 0px">
 <h2 style="text-align: center;">No report to show: your database is in sync</h2>
 </div></div>
-<div id="Dryrun2023-02-2308:25:13" class="tabcontent">
+<div id="Dryrun2023-02-2311:12:35" class="tabcontent">
 <div style="display: flex; justify-content: left;">
 <h1>Dry run report</h1>
 </div>
 <pre><span class="comment">-- -====================================</span>
-<span class="comment">-- Flyway Dry Run (2023-02-23 08:25:38)</span>
+<span class="comment">-- Flyway Dry Run (2023-02-23 11:13:01)</span>
 <span class="comment">-- -====================================</span>
 
 <span class="keyword">USE</span> [AdventureWorksLT2019]
@@ -162,10 +162,10 @@ details>details {
 <span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span>
 <span class="keyword">GO</span>
 
-<span class="comment">-- Executing: migrate -> v006.20230222190935 (with callbacks)</span>
+<span class="comment">-- Executing: migrate -> v007.20230223173836 (with callbacks)</span>
 <span class="comment">-- ---------------------------------------------------------------------------------------</span>
 
-<span class="comment">-- Source: C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migrations\V006_20230222190935__BMac.sql</span>
+<span class="comment">-- Source: C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migrations\V007_20230223173836__BMac.sql</span>
 <span class="comment">-- -------------------------------------------------------------------------------------------------------------------</span>
 <span class="keyword">SET</span> NUMERIC_ROUNDABORT <span class="keyword">OFF</span>
 <span class="keyword">GO</span>
@@ -176,9 +176,9 @@ details>details {
 <span class="keyword">SET</span> XACT_ABORT <span class="keyword">ON</span>
 <span class="keyword">GO</span>
 <span class="keyword">PRINT</span>(<span class="keyword">N</span>'Update 1 row in [SalesLT].[Customer]')
-<span class="keyword">UPDATE</span> [SalesLT].[Customer] <span class="keyword">SET</span> [Suffix]=<span class="keyword">N</span>'newData1' <span class="keyword">WHERE</span> [CustomerID] = 5
+<span class="keyword">UPDATE</span> [SalesLT].[Customer] <span class="keyword">SET</span> [Suffix]=<span class="keyword">N</span>'newData2' <span class="keyword">WHERE</span> [CustomerID] = 5
 <span class="keyword">GO</span>
-<span class="keyword">INSERT</span> <span class="keyword">INTO</span> [AdventureWorksLT2019].[dbo].[flyway_schema_history] ([installed_rank], [version], [description], [type], [script], [checksum], [installed_by], [execution_time], [success]) <span class="keyword">VALUES</span> (6, '006.20230222190935', 'BMac', '<span class="keyword">SQL</span>', 'V006_20230222190935__BMac.sql', 566153541, 'sa', 6, 1)
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> [AdventureWorksLT2019].[dbo].[flyway_schema_history] ([installed_rank], [version], [description], [type], [script], [checksum], [installed_by], [execution_time], [success]) <span class="keyword">VALUES</span> (7, '007.20230223173836', 'BMac', '<span class="keyword">SQL</span>', 'V007_20230223173836__BMac.sql', 341010198, 'sa', 9, 1)
 <span class="keyword">GO</span>
 <span class="keyword">USE</span> [AdventureWorksLT2019]
 <span class="keyword">GO</span>

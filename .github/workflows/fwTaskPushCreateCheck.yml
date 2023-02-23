@@ -1,7 +1,7 @@
 # This is a workflow to check and create a pull request for db changes
  
 name: Flyway Check Pipeline (Self-Hosted)
-run-name: Check ${{ github.head_ref || github.ref_name }} migration to ${{ github.event.repository.full_name }}/${{ github.event.repository.default_branch }}
+run-name: Check ${{ github.head_ref || github.ref_name }} migration to ${{ github.event.repository.name }}/${{ github.event.repository.default_branch }}
 
 # Controls when the workflow will run
 on:
@@ -24,7 +24,9 @@ env:
   ACTIONS_RUNNER_DEBUG: true
   ACTION_EMAIL: "MTPenguinAction@youremail.com"
   ACTION_USER: "MTPenguinAction"
-  INFO_FILENAME: "info"
+  REPORT_PATH: ${{ github.WORKSPACE }}\reports\
+  PUBLISH_PATH: https://mtpenguin.github.io/AdvWorksAuto/
+  INFO_FILENAME: "${{ github.RUN_ID }}-Info"
 
 permissions:
   contents: write
@@ -72,14 +74,15 @@ jobs:
       - name: Run Flyway info command
         id: checkStates
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILENAME }}.json
-          $infoObj = Get-Content -Raw -Path ${{ env.INFO_FILENAME }}.json | ConvertFrom-Json
-          cat ${{ env.INFO_FILENAME }}.json
-          echo "FLYWAY migration information:" > ${{ env.INFO_FILENAME }}.txt
-          echo `````` >> ${{ env.INFO_FILENAME }}.txt
-          $infoObj.migrations | Format-Table >> ${{ env.INFO_FILENAME }}.txt
-          echo `````` >> ${{ env.INFO_FILENAME }}.txt
-          cat ${{ env.INFO_FILENAME }}.txt
+          md -Force ${{ env.REPORT_PATH }}
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.json
+          $infoObj = Get-Content -Raw -Path ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.json | ConvertFrom-Json
+          cat ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.json
+          echo "FLYWAY migration information:" > ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.txt
+          echo `````` >> ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.txt
+          $infoObj.migrations | Format-Table >> ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.txt
+          echo `````` >> ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.txt
+          cat ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.txt
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
           echo "$( $pending.count )"
@@ -89,21 +92,21 @@ jobs:
         run: |
           git config --global user.name "${{ env.ACTION_USER }}"
           git config --global user.email "${{ env.ACTION_EMAIL }}"
-          git add ${{ env.INFO_FILENAME }}.*
+          git add ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.*
           
       - name: Echo pending migrations
         run: |
           echo "${{ steps.checkStates.outputs.pendingMigrations }}"
                    
       # Publish as an artifact
-      - name: Publish migration information json as artifact
+      - name: Publish migration information
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
-          name: flyway-info-artifact
+          name: flyway-info
           path: |
-            ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.txt
-            ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.json
+            ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.txt
+            ${{ env.REPORT_PATH }}${{ env.INFO_FILENAME }}.json
           
       - name: Commit info files and comment current migrations
         if: ${{ steps.checkStates.outputs.pendingMigrations == 'True' }}
@@ -186,19 +189,19 @@ jobs:
           cp -R ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/ || : 
       
       # After migration scripts are validated, publish them as an artifact
-      - name: Publish validated migration scripts as artifact
+      - name: Publish validated migration scripts
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
-          name: flyway-build-artifact
+          name: flyway-build
           path: Artifact_Files/Migration/
  
       # After environment specific migration scripts are validated, publish them as an artifact
-      - name: Publish validated environment specific migration scripts as artifact
+      - name: Publish validated environment specific migration scripts
         if: env.publishArtifacts == 'true' && env.env_migrations == 'True'
         uses: actions/upload-artifact@v3
         with: 
-          name: flyway-build-artifact
+          name: flyway-build # Same name should be OK? ref:https://github.com/actions/upload-artifact/issues/279
           path: Artifact_Files/Migration-${{ vars.ENV_NAME }}/
  
   prod-preparation:
@@ -224,9 +227,7 @@ jobs:
         failReleaseIfDriftDetected: false
         publishArtifacts: true
         GITHUB_TOKEN: ${{ github.token }}
-        REPORT_FILE: ${{ secrets.databaseName }}-Run-${{ github.RUN_ID }}-Check-Report.html
-        REPORT_PATH: ${{ github.WORKSPACE }}\reports\
-        PUBLISH_PATH: https://mtpenguin.github.io/AdvWorksAuto/
+        REPORT_FILE: ${{ github.RUN_ID }}-${{ secrets.databaseName }}-Check-Report.html
  
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
@@ -245,7 +246,7 @@ jobs:
             flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ env.REPORT_PATH }}${{ env.REPORT_FILE }}"
           continue-on-error: false
  
-        - name: Publish check report as artifact
+        - name: Publish check report
           if: env.publishArtifacts == 'true' && (${{ failure() }} || ${{ success() }})
           uses: actions/upload-artifact@v3
           with: 
@@ -272,6 +273,6 @@ jobs:
         - name: Trigger check report to GitHub pages workflow
           if: ${{ failure() }} || ${{ success() }}
           run: |
-            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f report_file="${{ env.REPORT_FILE }}"
+            gh workflow run fwCheckReport.yml -r ${{ github.ref }} -f report_path="${{ env.PUBLISH_PATH }}" -f check_file="${{ env.REPORT_FILE }}" -f info_file="${{ env.INFO_FILENAME }}.txt"
         
         
