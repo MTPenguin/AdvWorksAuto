@@ -21,7 +21,7 @@ on:
       
 
 env:
-  REPORT_PATH: ./reports
+  REPORT_PATH: ${{ github.WORKSPACE }}/reports # ./reports
   INFO_FILENAME: "info"
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
