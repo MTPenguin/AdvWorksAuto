@@ -63,11 +63,11 @@ jobs:
           echo "${{ steps.checkStates.outputs.pendingMigrations }}"
                    
       # Publish them as an artifact
-      - name: Publish validated migration scripts as artifact
+      - name: Publish validated migration scripts
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
-          name: flyway-info-artifact
+          name: flyway-info
           path: |
             ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.txt
             ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.json

@@ -26,7 +26,7 @@ env:
   ACTION_USER: "MTPenguinAction"
   REPORT_PATH: ${{ github.WORKSPACE }}\reports\
   PUBLISH_PATH: https://mtpenguin.github.io/AdvWorksAuto/
-  INFO_FILENAME: "info"
+  INFO_FILENAME: "${{ github.RUN_ID }}-Info"
 
 permissions:
   contents: write
@@ -98,11 +98,11 @@ jobs:
           echo "${{ steps.checkStates.outputs.pendingMigrations }}"
                    
       # Publish as an artifact
-      - name: Publish migration information json as artifact
+      - name: Publish migration information
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
-          name: flyway-info-artifact
+          name: flyway-info
           path: |
             ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.txt
             ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.json
@@ -188,19 +188,19 @@ jobs:
           cp -R ${{ github.WORKSPACE }}/migrations-${{ vars.ENV_NAME }} Artifact_Files/Migration-${{ vars.ENV_NAME }}/ || : 
       
       # After migration scripts are validated, publish them as an artifact
-      - name: Publish validated migration scripts as artifact
+      - name: Publish validated migration scripts
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v3
         with: 
-          name: flyway-build-artifact
+          name: flyway-build
           path: Artifact_Files/Migration/
  
       # After environment specific migration scripts are validated, publish them as an artifact
-      - name: Publish validated environment specific migration scripts as artifact
+      - name: Publish validated environment specific migration scripts
         if: env.publishArtifacts == 'true' && env.env_migrations == 'True'
         uses: actions/upload-artifact@v3
         with: 
-          name: flyway-build-artifact
+          name: flyway-build # Same name should be OK? ref:https://github.com/actions/upload-artifact/issues/279
           path: Artifact_Files/Migration-${{ vars.ENV_NAME }}/
  
   prod-preparation:
@@ -245,7 +245,7 @@ jobs:
             flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.buildUrl=${{ env.check_JDBC }}" "-check.buildUser=${{ env.check_userName }}" "-check.buildPassword=${{ env.check_password }}" -url="${{ env.JDBC }}" "-check.reportFilename=${{ env.REPORT_PATH }}${{ env.REPORT_FILE }}"
           continue-on-error: false
  
-        - name: Publish check report as artifact
+        - name: Publish check report
           if: env.publishArtifacts == 'true' && (${{ failure() }} || ${{ success() }})
           uses: actions/upload-artifact@v3
           with: 
