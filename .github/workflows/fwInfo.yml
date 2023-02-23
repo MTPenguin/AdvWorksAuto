@@ -12,7 +12,7 @@ env:
   FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }} #Repository Secret - Create this within the Projects Settings > Secrets > Actions section
   # Enable this for additional debug logging
   ACTIONS_RUNNER_DEBUG: true
-  INFO_FILE: "info.json"
+  INFO_FILENAME: "info"
  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -32,14 +32,13 @@ jobs:
       userName: ${{ secrets.userName }}
       password: ${{ secrets.password }}
       # End of Environment Secrets #
-      displayName: 'Info'
       publishArtifacts: true
  
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Get/Set deployment environment
         run: |
-          $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+          $deployments = curl ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
           echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
           echo "${{ env.deployment_environment }}"
       
@@ -50,9 +49,9 @@ jobs:
       - name: Run Flyway Info command
         id: checkStates
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILE }}
-          $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
-          cat ${{ env.INFO_FILE }}
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILENAME }}.json
+          $infoObj = Get-Content -Raw -Path ${{ env.INFO_FILENAME }}.json | ConvertFrom-Json
+          cat ${{ env.INFO_FILENAME }}.json
           echo "$( $infoObj )"
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
@@ -69,5 +68,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-info-artifact
-          path: ${{ github.WORKSPACE }}\${{ env.INFO_FILE }}
-      
+          path: |
+            ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.txt
+            ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.json
+          

@@ -24,7 +24,7 @@ env:
   ACTIONS_RUNNER_DEBUG: true
   ACTION_EMAIL: "MTPenguinAction@youremail.com"
   ACTION_USER: "MTPenguinAction"
-  INFO_FILE: "info.json"
+  INFO_FILENAME: "info"
 
 permissions:
   contents: write
@@ -61,38 +61,39 @@ jobs:
     steps:
       - name: Get/Set deployment environment
         run: |
-          $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+          $deployments = curl ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
           echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
           echo "${{ env.deployment_environment }}"
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
-      # Runs the Flyway info command
+      # Runs the Flyway info command ([ ` ] "tick" character IS escape character)
       - name: Run Flyway info command
         id: checkStates
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILE }}
-          $infoObj = Get-Content -Raw -Path info.json | ConvertFrom-Json
-          cat ${{ env.INFO_FILE }}
-          echo "$( $infoObj )"
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info -url="${{ env.JDBC }}" -outputType=json > ${{ env.INFO_FILENAME }}.json
+          $infoObj = Get-Content -Raw -Path ${{ env.INFO_FILENAME }}.json | ConvertFrom-Json
+          cat ${{ env.INFO_FILENAME }}.json
+          echo "FLYWAY migration information:" > ${{ env.INFO_FILENAME }}.txt
+          echo `````` >> ${{ env.INFO_FILENAME }}.txt
+          $infoObj.migrations | Format-Table >> ${{ env.INFO_FILENAME }}.txt
+          echo `````` >> ${{ env.INFO_FILENAME }}.txt
+          cat ${{ env.INFO_FILENAME }}.txt
           $pending = @($infoObj.migrations | Where-Object -Property state -Match "^Pending")
           echo "$( $pending )"
           echo "$( $pending.count )"
           echo "pendingMigrations=$( $pending.count -ne 0)" > $env:GITHUB_OUTPUT
           
-      - name: Echo pending migrations
-        run: |
-          echo "${{ steps.checkStates.outputs.pendingMigrations }}"
-                   
-      - name: Commit and comment if nothing to do
-        if: ${{ steps.checkStates.outputs.pendingMigrations == 'False' }}
+      - name: Add info files to repo
         run: |
           git config --global user.name "${{ env.ACTION_USER }}"
           git config --global user.email "${{ env.ACTION_EMAIL }}"
-          git add ${{ env.INFO_FILE }}
-          git commit -am "No pending migrations found"
-          git push
+          git add ${{ env.INFO_FILENAME }}.*
+          
+      - name: Echo pending migrations
+        run: |
+          echo "${{ steps.checkStates.outputs.pendingMigrations }}"
                    
       # Publish as an artifact
       - name: Publish migration information json as artifact
@@ -100,8 +101,24 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-info-artifact
-          path: ${{ github.WORKSPACE }}\${{ env.INFO_FILE }}
-
+          path: |
+            ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.txt
+            ${{ github.WORKSPACE }}\${{ env.INFO_FILENAME }}.json
+          
+      - name: Commit info files and comment current migrations
+        if: ${{ steps.checkStates.outputs.pendingMigrations == 'True' }}
+        run: |
+          git commit -am "Add migration info files"
+          git push
+                   
+      - name: Commit info files and comment NOTHING to do!
+        if: ${{ steps.checkStates.outputs.pendingMigrations == 'False' }}
+        run: |
+          git commit -am "No pending migrations found"
+          git push
+          echo "::error::NOTHING to do!"; exit 1
+                   
+        
   
   build:
     name: Deploy Build
@@ -125,7 +142,7 @@ jobs:
     steps:
       - name: Get/Set deployment environment
         run: |
-          $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+          $deployments = curl ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
           echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
           echo "${{ env.deployment_environment }}"
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -205,7 +222,6 @@ jobs:
         # End of Environment Secrets #
         generateDriftAndChangeReport: true
         failReleaseIfDriftDetected: false
-        staticCodeAnalysis: false #Currently not setup in this pipeline
         publishArtifacts: true
         GITHUB_TOKEN: ${{ github.token }}
         REPORT_FILE: ${{ secrets.databaseName }}-Run-${{ github.RUN_ID }}-Check-Report.html
@@ -216,7 +232,7 @@ jobs:
       steps:
         - name: Get/Set deployment environment
           run: |
-            $deployments = curl -Method GET ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
+            $deployments = curl ${{ github.event.repository.deployments_url }} | ConvertFrom-Json
             echo "deployment_environment=$( $deployments[0] | select -expand environment )" >> $env:GITHUB_ENV
             echo "${{ env.deployment_environment }}"
         # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -244,6 +260,7 @@ jobs:
             git config --global user.email "${{ env.ACTION_EMAIL }}"
             git add ${{ env.REPORT_PATH }}
             git commit -am "Flyway check report URL:${{ env.PUBLISH_PATH }}${{ env.REPORT_FILE }}"
+            git pull
             git push
         
         - name: Create ${{ env.branch_name }} pull request
