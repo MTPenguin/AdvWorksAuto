@@ -1,7 +1,7 @@
 # This is the final workflow in a pipeline to run migration scripts on production and merge the PR on success
  
 name: Flyway Dispatch Deploy Pipeline (Self-Hosted)
-run-name: Deploy ${{ github.event.pull_request.head.ref }} To ${{ github.event.repository.full_name }}/${{ github.event.pull_request.base.ref }}
+run-name: Deploy ${{ github.event.pull_request.head.ref }} To ${{ github.event.repository.name }}/${{ github.event.pull_request.base.ref }}
 
 # Controls when the workflow will run
 on:
