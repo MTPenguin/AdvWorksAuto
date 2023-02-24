@@ -8,5 +8,5 @@ SET XACT_ABORT ON
 GO
 
 PRINT(N'Update 1 row in [SalesLT].[Customer]')
-UPDATE [SalesLT].[Customer] SET [Suffix]=N'6' WHERE [CustomerID] = 5
+UPDATE [SalesLT].[Customer] SET [Suffix]=N'newData4' WHERE [CustomerID] = 5
 
