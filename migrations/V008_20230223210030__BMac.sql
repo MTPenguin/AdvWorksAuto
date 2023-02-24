@@ -11,3 +11,4 @@ PRINT(N'Update 1 row in [SalesLT].[Customer]')
 UPDATE [SalesLT].[Customer] SET [Suffix]=N'nextData' WHERE [CustomerID] = 6
 
 
+
