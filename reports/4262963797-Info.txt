@@ -1,0 +1,26 @@
+FLYWAY migration information:
+```
+
+version            description           state    filepath
+-------            -----------           -----    --------
+001.20230217110212 << Flyway Baseline >> Baseline 
+002.20230217190132 BMac                  Success  C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migr
+                                                  ations\V002_20230217190132__BMac.sql
+003.20230222141404 BMac                  Success  C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migr
+                                                  ations\V003_20230222141404__BMac.sql
+004.20230222143319 BMac                  Success  C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migr
+                                                  ations\V004_20230222143319__BMac.sql
+005.20230222164558 BMac                  Success  C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migr
+                                                  ations\V005_20230222164558__BMac.sql
+006.20230222190935 BMac                  Success  C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migr
+                                                  ations\V006_20230222190935__BMac.sql
+007.20230223173836 BMac                  Success  C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migr
+                                                  ations\V007_20230223173836__BMac.sql
+001.20230217110212 baseline              Ignored  C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migr
+                                                  ations\B001_20230217110212__baseline.sql
+008.20230223202157 prod                  Pending  C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migr
+                                                  ations-prod\V008_20230223202157__prod.sql
+008.20230223210030 BMac                  Pending  C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migr
+                                                  ations\V008_20230223210030__BMac.sql
+
+```
