@@ -78,12 +78,12 @@ jobs:
       - name: Echo Context
         id: echo_context
         run: |
-          echo "${{ vars.ENV_NAME }}"
+          echo "${{ env.deployment_environment }}"
       
       # Test setting env
       - name: Set Env
         run: |
-          echo "dir_exists=$(Test-Path ${{ vars.ENV_NAME }})" >> $env:GITHUB_ENV
+          echo "dir_exists=$(Test-Path ${{ env.deployment_environment }})" >> $env:GITHUB_ENV
       - name: Set Env 2
         run: |
           echo "dir_2=2" >> $env:GITHUB_ENV
