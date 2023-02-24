@@ -184,9 +184,8 @@ jobs:
       # Create a directory to stage the environment specific artifact files
       - name: Stage environment specific files for publishing
         if: env.publishArtifacts == 'true' && env.env_migrations == 'True'
-        run: |
-          mkdir -force Artifact_Files/Migration-${{ env.deployment_environment }}
-          cp -R ${{ github.WORKSPACE }}/migrations-${{ env.deployment_environment }} Artifact_Files/Migration-${{ env.deployment_environment }}/ || : 
+        run: | # || : prevents errors on empty dir
+          cp -R ${{ github.WORKSPACE }}/migrations-${{ env.deployment_environment }}/* Artifact_Files/Migration/ || : 
       
       # After migration scripts are validated, publish them as an artifact
       - name: Publish validated migration scripts
@@ -194,15 +193,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-build
-          path: Artifact_Files/Migration*/*
- 
-      # After environment specific migration scripts are validated, publish them as an artifact
-      # - name: Publish validated environment specific migration scripts
-      #   if: env.publishArtifacts == 'true' && env.env_migrations == 'True'
-      #   uses: actions/upload-artifact@v3
-      #   with: 
-      #     name: flyway-build # Same name should be OK? ref:https://github.com/actions/upload-artifact/issues/279
-      #     path: Artifact_Files/Migration-${{ env.deployment_environment }}/*
+          path: Artifact_Files/Migration/
  
   prod-preparation:
       name: Production deployment preparation - report creation
