@@ -17,3 +17,5 @@ DELETE FROM [SalesLT].[Customer] WHERE [CustomerID] = 6
 DELETE FROM [SalesLT].[Customer] WHERE [CustomerID] = 7
 DELETE FROM [SalesLT].[Customer] WHERE [CustomerID] = 10
 
+
+
