@@ -194,7 +194,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-build
-          path: Artifact_Files/Migration/
+          path: Artifact_Files/Migration/*
  
       # After environment specific migration scripts are validated, publish them as an artifact
       - name: Publish validated environment specific migration scripts
@@ -202,7 +202,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: flyway-build # Same name should be OK? ref:https://github.com/actions/upload-artifact/issues/279
-          path: Artifact_Files/Migration-${{ env.deployment_environment }}/
+          path: Artifact_Files/Migration-${{ env.deployment_environment }}/*
  
   prod-preparation:
       name: Production deployment preparation - report creation
