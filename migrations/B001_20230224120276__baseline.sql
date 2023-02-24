@@ -8,10 +8,6 @@ IF SCHEMA_ID(N'SalesLT') IS NULL
 EXEC sp_executesql N'CREATE SCHEMA [SalesLT]
 AUTHORIZATION [dbo]'
 GO
-IF SCHEMA_ID(N'flyway') IS NULL
-EXEC sp_executesql N'CREATE SCHEMA [flyway]
-AUTHORIZATION [dbo]'
-GO
 PRINT N'Creating XML schema collections'
 GO
 CREATE XML SCHEMA COLLECTION [SalesLT].[ProductDescriptionSchemaCollection]
@@ -469,7 +465,8 @@ CREATE TABLE [SalesLT].[Customer]
 [PasswordSalt] [nchar] (10) NULL,
 [rowguid] [uniqueidentifier] NOT NULL ROWGUIDCOL CONSTRAINT [DF_Customer_rowguid] DEFAULT (newid()),
 [ModifiedDate] [datetime] NOT NULL CONSTRAINT [DF_Customer_ModifiedDate] DEFAULT (getdate()),
-[New] [nchar] (10) NULL
+[New] [nchar] (10) NULL,
+[New2] [nchar] (10) NULL
 )
 GO
 PRINT N'Creating primary key [PK_Customer_CustomerID] on [SalesLT].[Customer]'
@@ -861,6 +858,8 @@ ALTER TABLE [SalesLT].[SalesOrderHeader] ADD CONSTRAINT [FK_SalesOrderHeader_Add
 GO
 ALTER TABLE [SalesLT].[SalesOrderHeader] ADD CONSTRAINT [FK_SalesOrderHeader_Address_ShipTo_AddressID] FOREIGN KEY ([ShipToAddressID]) REFERENCES [SalesLT].[Address] ([AddressID])
 GO
+ALTER TABLE [SalesLT].[SalesOrderHeader] ADD CONSTRAINT [FK_SalesOrderHeader_Customer_CustomerID] FOREIGN KEY ([CustomerID]) REFERENCES [SalesLT].[Customer] ([CustomerID])
+GO
 PRINT N'Adding foreign keys to [SalesLT].[Product]'
 GO
 ALTER TABLE [SalesLT].[Product] ADD CONSTRAINT [FK_Product_ProductCategory_ProductCategoryID] FOREIGN KEY ([ProductCategoryID]) REFERENCES [SalesLT].[ProductCategory] ([ProductCategoryID])
@@ -981,9 +980,17 @@ EXEC sp_addextendedproperty N'MS_Description', N'A courtesy title. For example, 
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Unique nonclustered constraint. Used to support replication samples.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'AK_Customer_rowguid'
 GO
-EXEC sp_addextendedproperty N'MS_Description', N'Clustered index created by a primary key constraint.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'PK_Customer_CustomerID'
+EXEC sp_addextendedproperty N'MS_Description', N'Default constraint value of GETDATE()', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'DF_Customer_ModifiedDate'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'Default constraint value of 0', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'DF_Customer_NameStyle'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'Default constraint value of NEWID()', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'DF_Customer_rowguid'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'Primary key (clustered) constraint', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'CONSTRAINT', N'PK_Customer_CustomerID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Nonclustered index.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'INDEX', N'IX_Customer_EmailAddress'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'Clustered index created by a primary key constraint.', 'SCHEMA', N'SalesLT', 'TABLE', N'Customer', 'INDEX', N'PK_Customer_CustomerID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'High-level product categorization.', 'SCHEMA', N'SalesLT', 'TABLE', N'ProductCategory', NULL, NULL
 GO
@@ -1250,6 +1257,8 @@ GO
 EXEC sp_addextendedproperty N'MS_Description', N'Foreign key constraint referencing Address.AddressID for BillTo.', 'SCHEMA', N'SalesLT', 'TABLE', N'SalesOrderHeader', 'CONSTRAINT', N'FK_SalesOrderHeader_Address_BillTo_AddressID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Foreign key constraint referencing Address.AddressID for ShipTo.', 'SCHEMA', N'SalesLT', 'TABLE', N'SalesOrderHeader', 'CONSTRAINT', N'FK_SalesOrderHeader_Address_ShipTo_AddressID'
+GO
+EXEC sp_addextendedproperty N'MS_Description', N'Foreign key constraint referencing Customer.CustomerID.', 'SCHEMA', N'SalesLT', 'TABLE', N'SalesOrderHeader', 'CONSTRAINT', N'FK_SalesOrderHeader_Customer_CustomerID'
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Primary key (clustered) constraint', 'SCHEMA', N'SalesLT', 'TABLE', N'SalesOrderHeader', 'CONSTRAINT', N'PK_SalesOrderHeader_SalesOrderID'
 GO
