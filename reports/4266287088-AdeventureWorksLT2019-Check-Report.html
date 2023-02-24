@@ -97,15 +97,15 @@ details>details {
 <div class="dropdown" style="float: right; clear: both; margin-top: 50px">
 <label for="dropdown">Report generated:</label>
 <select onchange="onTimestampClick(event, this.value)" id="dropdown">
-<option value="2023-02-24 13:08:36" selected="true">2023-02-24 13:08:36</option>
+<option value="2023-02-24 14:11:14" selected="true">2023-02-24 14:11:14</option>
 </select>
 </div>
-<div class="page 2023-02-24 13:08:36">
+<div class="page 2023-02-24 14:11:14">
 <div class="tabs">
-<button class="tab" onclick="onTabClick(event, 'Changereport2023-02-2413:08:36')"><h4>Change report</h4></button>
-<button class="tab" onclick="onTabClick(event, 'Driftreport2023-02-2413:08:36')"><h4>Drift report</h4></button>
-<button class="tab" onclick="onTabClick(event, 'Dryrun2023-02-2413:08:36')" id="open-2023-02-24 13:08:36"><h4>Dry run</h4></button>
-</div><div id="Changereport2023-02-2413:08:36" class="tabcontent">
+<button class="tab" onclick="onTabClick(event, 'Changereport2023-02-2414:11:14')"><h4>Change report</h4></button>
+<button class="tab" onclick="onTabClick(event, 'Driftreport2023-02-2414:11:14')"><h4>Drift report</h4></button>
+<button class="tab" onclick="onTabClick(event, 'Dryrun2023-02-2414:11:14')" id="open-2023-02-24 14:11:14"><h4>Dry run</h4></button>
+</div><div id="Changereport2023-02-2414:11:14" class="tabcontent">
 <div style="display: flex; justify-content: left;">
 <h1>Change report&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: normal; font-size: 16px">Database: AdventureWorksLT2019</span></h1>
 </div>
@@ -116,7 +116,7 @@ details>details {
 <div style="width: 700px; background-color: #F2F2F2; margin: 100px auto; padding: 10px 0px">
 <h2 style="text-align: center;">No report to show: your database is in sync</h2>
 </div></div>
-<div id="Driftreport2023-02-2413:08:36" class="tabcontent">
+<div id="Driftreport2023-02-2414:11:14" class="tabcontent">
 <div style="display: flex; justify-content: left;">
 <h1>Drift report&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: normal; font-size: 16px">Database: AdventureWorksLT2019</span></h1>
 </div>
@@ -127,12 +127,12 @@ details>details {
 <div style="width: 700px; background-color: #F2F2F2; margin: 100px auto; padding: 10px 0px">
 <h2 style="text-align: center;">No report to show: your database is in sync</h2>
 </div></div>
-<div id="Dryrun2023-02-2413:08:36" class="tabcontent">
+<div id="Dryrun2023-02-2414:11:14" class="tabcontent">
 <div style="display: flex; justify-content: left;">
 <h1>Dry run report</h1>
 </div>
 <pre><span class="comment">-- -====================================</span>
-<span class="comment">-- Flyway Dry Run (2023-02-24 13:08:59)</span>
+<span class="comment">-- Flyway Dry Run (2023-02-24 14:11:36)</span>
 <span class="comment">-- -====================================</span>
 
 <span class="keyword">USE</span> [AdventureWorksLT2019]
@@ -162,10 +162,10 @@ details>details {
 <span class="keyword">SET</span> ANSI_NULLS <span class="keyword">ON</span>
 <span class="keyword">GO</span>
 
-<span class="comment">-- Executing: migrate -> v002.20230224191036 (with callbacks)</span>
+<span class="comment">-- Executing: migrate -> v003.20230224210757 (with callbacks)</span>
 <span class="comment">-- ---------------------------------------------------------------------------------------</span>
 
-<span class="comment">-- Source: C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migrations\V002_20230224191036__BMac.sql</span>
+<span class="comment">-- Source: C:\Users\BMac\actions-runner-auto\_work\AdvWorksAuto\AdvWorksAuto\migrations\V003_20230224210757__BMac.sql</span>
 <span class="comment">-- -------------------------------------------------------------------------------------------------------------------</span>
 <span class="keyword">SET</span> NUMERIC_ROUNDABORT <span class="keyword">OFF</span>
 <span class="keyword">GO</span>
@@ -175,19 +175,15 @@ details>details {
 <span class="keyword">GO</span>
 <span class="keyword">SET</span> XACT_ABORT <span class="keyword">ON</span>
 <span class="keyword">GO</span>
-<span class="keyword">PRINT</span>(<span class="keyword">N</span>'Add 8 rows to [SalesLT].[Customer]')
-<span class="keyword">SET</span> IDENTITY_INSERT [SalesLT].[Customer] <span class="keyword">ON</span>
--- <span class="keyword">INSERT</span> <span class="keyword">INTO</span> [SalesLT].[Customer] ([CustomerID], [NameStyle], [Title], [FirstName], [MiddleName], [LastName], [Suffix], [CompanyName], [SalesPerson], [EmailAddress], [Phone], [PasswordHash], [PasswordSalt], [rowguid], [ModifiedDate], [New], [New2]) <span class="keyword">VALUES</span> (1, 0, <span class="keyword">N</span>'Mr.', <span class="keyword">N</span>'Orlando', <span class="keyword">N</span>'<span class="keyword">N</span>.', <span class="keyword">N</span>'Gee', <span class="keyword">N</span>'4', <span class="keyword">N</span>'<span class="keyword">A</span> Bike Store', <span class="keyword">N</span>'adventure-works\pamela0', <span class="keyword">N</span>'orlando0@adventure-works.com', <span class="keyword">N</span>'245-555-0173', '<span class="keyword">L</span>/Rlwxzp4w7RWmEgXX+/A7cXaePEPcp+KwQhl2fJL7w=', <span class="keyword">NULL</span>, '3f5ae95e-b87d-4aed-95b4-c3797afcb74f', '2005-08-01 00:00:00.000', <span class="keyword">NULL</span>, <span class="keyword">NULL</span>)
--- <span class="keyword">INSERT</span> <span class="keyword">INTO</span> [SalesLT].[Customer] ([CustomerID], [NameStyle], [Title], [FirstName], [MiddleName], [LastName], [Suffix], [CompanyName], [SalesPerson], [EmailAddress], [Phone], [PasswordHash], [PasswordSalt], [rowguid], [ModifiedDate], [New], [New2]) <span class="keyword">VALUES</span> (2, 0, <span class="keyword">N</span>'Mr.', <span class="keyword">N</span>'Keith', <span class="keyword">NULL</span>, <span class="keyword">N</span>'Harris', <span class="keyword">N</span>'3', <span class="keyword">N</span>'Progressive Sports', <span class="keyword">N</span>'adventure-works\david8', <span class="keyword">N</span>'keith0@adventure-works.com', <span class="keyword">N</span>'170-555-0127', 'YPdtRdvqeAhj6wyxEsFdshBDNXxkCXn+CRgbvJItknw=', <span class="keyword">NULL</span>, 'e552f657-a9af-4a7d-a645-c429d6e02491', '2006-08-01 00:00:00.000', <span class="keyword">NULL</span>, <span class="keyword">NULL</span>)
--- <span class="keyword">INSERT</span> <span class="keyword">INTO</span> [SalesLT].[Customer] ([CustomerID], [NameStyle], [Title], [FirstName], [MiddleName], [LastName], [Suffix], [CompanyName], [SalesPerson], [EmailAddress], [Phone], [PasswordHash], [PasswordSalt], [rowguid], [ModifiedDate], [New], [New2]) <span class="keyword">VALUES</span> (3, 0, <span class="keyword">N</span>'Ms.', <span class="keyword">N</span>'Donna', <span class="keyword">N</span>'<span class="keyword">F</span>.', <span class="keyword">N</span>'Carreras', <span class="keyword">N</span>'2', <span class="keyword">N</span>'Advanced Bike Components', <span class="keyword">N</span>'adventure-works\jillian0', <span class="keyword">N</span>'donna0@adventure-works.com', <span class="keyword">N</span>'279-555-0130', 'LNoK27abGQo48gGue3EBV/UrlYSToV0/s87dCRV7uJk=', <span class="keyword">NULL</span>, '130774b1-db21-4ef3-98c8-c104bcd6ed6d', '2005-09-01 00:00:00.000', <span class="keyword">NULL</span>, <span class="keyword">NULL</span>)
--- <span class="keyword">INSERT</span> <span class="keyword">INTO</span> [SalesLT].[Customer] ([CustomerID], [NameStyle], [Title], [FirstName], [MiddleName], [LastName], [Suffix], [CompanyName], [SalesPerson], [EmailAddress], [Phone], [PasswordHash], [PasswordSalt], [rowguid], [ModifiedDate], [New], [New2]) <span class="keyword">VALUES</span> (4, 0, <span class="keyword">N</span>'Ms.', <span class="keyword">N</span>'Janet', <span class="keyword">N</span>'<span class="keyword">M</span>.', <span class="keyword">N</span>'Gates', <span class="keyword">N</span>'1', <span class="keyword">N</span>'Modular Cycle Systems', <span class="keyword">N</span>'adventure-works\jillian0', <span class="keyword">N</span>'janet1@adventure-works.com', <span class="keyword">N</span>'710-555-0173', 'ElzTpSNbUW1Ut+L5cWlfR7MF6nBZia8WpmGaQPjLOJA=', <span class="keyword">NULL</span>, 'ff862851-1daa-4044-be7c-3e85583c054d', '2006-07-01 00:00:00.000', <span class="keyword">NULL</span>, <span class="keyword">NULL</span>)
--- <span class="keyword">INSERT</span> <span class="keyword">INTO</span> [SalesLT].[Customer] ([CustomerID], [NameStyle], [Title], [FirstName], [MiddleName], [LastName], [Suffix], [CompanyName], [SalesPerson], [EmailAddress], [Phone], [PasswordHash], [PasswordSalt], [rowguid], [ModifiedDate], [New], [New2]) <span class="keyword">VALUES</span> (5, 0, <span class="keyword">N</span>'Mr.', <span class="keyword">N</span>'Lucy', <span class="keyword">NULL</span>, <span class="keyword">N</span>'Harrington', <span class="keyword">N</span>'newData2', <span class="keyword">N</span>'Metropolitan Sports Supply', <span class="keyword">N</span>'adventure-works\shu0', <span class="keyword">N</span>'lucy0@adventure-works.com', <span class="keyword">N</span>'828-555-0186', 'KJqV15wsX3PG8TS5GSddp6LFFVdd3CoRftZM/tP0+R4=', <span class="keyword">NULL</span>, '83905bdc-6f5e-4f71-b162-c98da069f38a', '2006-09-01 00:00:00.000', <span class="keyword">NULL</span>, <span class="keyword">NULL</span>)
--- <span class="keyword">INSERT</span> <span class="keyword">INTO</span> [SalesLT].[Customer] ([CustomerID], [NameStyle], [Title], [FirstName], [MiddleName], [LastName], [Suffix], [CompanyName], [SalesPerson], [EmailAddress], [Phone], [PasswordHash], [PasswordSalt], [rowguid], [ModifiedDate], [New], [New2]) <span class="keyword">VALUES</span> (6, 0, <span class="keyword">N</span>'Ms.', <span class="keyword">N</span>'Rosmarie', <span class="keyword">N</span>'<span class="keyword">J</span>.', <span class="keyword">N</span>'Carroll', <span class="keyword">N</span>'nextData', <span class="keyword">N</span>'Aerobic Exercise Company', <span class="keyword">N</span>'adventure-works\linda3', <span class="keyword">N</span>'rosmarie0@adventure-works.com', <span class="keyword">N</span>'244-555-0112', 'OKT0scizCdIzymHHOtyJKQiC/fCILSooSZ8dQ2Y34VM=', <span class="keyword">NULL</span>, '1a92df88-bfa2-467d-bd54-fcb9e647fdd7', '2007-09-01 00:00:00.000', <span class="keyword">NULL</span>, <span class="keyword">NULL</span>)
--- <span class="keyword">INSERT</span> <span class="keyword">INTO</span> [SalesLT].[Customer] ([CustomerID], [NameStyle], [Title], [FirstName], [MiddleName], [LastName], [Suffix], [CompanyName], [SalesPerson], [EmailAddress], [Phone], [PasswordHash], [PasswordSalt], [rowguid], [ModifiedDate], [New], [New2]) <span class="keyword">VALUES</span> (7, 0, <span class="keyword">N</span>'Mr.', <span class="keyword">N</span>'Dominic', <span class="keyword">N</span>'<span class="keyword">P</span>.', <span class="keyword">N</span>'Gash', <span class="keyword">NULL</span>, <span class="keyword">N</span>'Associated Bikes', <span class="keyword">N</span>'adventure-works\shu0', <span class="keyword">N</span>'dominic0@adventure-works.com', <span class="keyword">N</span>'192-555-0173', 'ZccoP/jZGQm+Xpzc7RKwDhS11YFNybwcPVRYTSNcnSg=', <span class="keyword">NULL</span>, '03e9273e-b193-448e-9823-fe0c44aeed78', '2006-07-01 00:00:00.000', <span class="keyword">NULL</span>, <span class="keyword">NULL</span>)
--- <span class="keyword">INSERT</span> <span class="keyword">INTO</span> [SalesLT].[Customer] ([CustomerID], [NameStyle], [Title], [FirstName], [MiddleName], [LastName], [Suffix], [CompanyName], [SalesPerson], [EmailAddress], [Phone], [PasswordHash], [PasswordSalt], [rowguid], [ModifiedDate], [New], [New2]) <span class="keyword">VALUES</span> (10, 0, <span class="keyword">N</span>'Ms.', <span class="keyword">N</span>'Kathleen', <span class="keyword">N</span>'<span class="keyword">M</span>.', <span class="keyword">N</span>'Garza', <span class="keyword">NULL</span>, <span class="keyword">N</span>'Rural Cycle Emporium', <span class="keyword">N</span>'adventure-works\josé1', <span class="keyword">N</span>'kathleen0@adventure-works.com', <span class="keyword">N</span>'150-555-0127', 'Qa3aMCxNbVLGrc0b99KsbQqiVgwYDfHcsK9GZSUxcTM=', <span class="keyword">NULL</span>, 'cdb6698d-2ff1-4fba-8f22-60ad1d11dabd', '2006-09-01 00:00:00.000', <span class="keyword">NULL</span>, <span class="keyword">NULL</span>)
-<span class="keyword">SET</span> IDENTITY_INSERT [SalesLT].[Customer] <span class="keyword">OFF</span>
+<span class="keyword">PRINT</span>(<span class="keyword">N</span>'Update 6 rows in [SalesLT].[Customer]')
+<span class="keyword">UPDATE</span> [SalesLT].[Customer] <span class="keyword">SET</span> [Suffix]=<span class="keyword">NULL</span> <span class="keyword">WHERE</span> [CustomerID] = 1
+<span class="keyword">UPDATE</span> [SalesLT].[Customer] <span class="keyword">SET</span> [Suffix]=<span class="keyword">NULL</span> <span class="keyword">WHERE</span> [CustomerID] = 2
+<span class="keyword">UPDATE</span> [SalesLT].[Customer] <span class="keyword">SET</span> [Suffix]=<span class="keyword">NULL</span> <span class="keyword">WHERE</span> [CustomerID] = 3
+<span class="keyword">UPDATE</span> [SalesLT].[Customer] <span class="keyword">SET</span> [Suffix]=<span class="keyword">NULL</span> <span class="keyword">WHERE</span> [CustomerID] = 4
+<span class="keyword">UPDATE</span> [SalesLT].[Customer] <span class="keyword">SET</span> [Suffix]=<span class="keyword">NULL</span> <span class="keyword">WHERE</span> [CustomerID] = 5
+<span class="keyword">UPDATE</span> [SalesLT].[Customer] <span class="keyword">SET</span> [Suffix]=<span class="keyword">NULL</span> <span class="keyword">WHERE</span> [CustomerID] = 6
 <span class="keyword">GO</span>
-<span class="keyword">INSERT</span> <span class="keyword">INTO</span> [AdventureWorksLT2019].[dbo].[flyway_schema_history] ([installed_rank], [version], [description], [type], [script], [checksum], [installed_by], [execution_time], [success]) <span class="keyword">VALUES</span> (2, '002.20230224191036', 'BMac', '<span class="keyword">SQL</span>', 'V002_20230224191036__BMac.sql', 35632843, 'sa', 6, 1)
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> [AdventureWorksLT2019].[dbo].[flyway_schema_history] ([installed_rank], [version], [description], [type], [script], [checksum], [installed_by], [execution_time], [success]) <span class="keyword">VALUES</span> (3, '003.20230224210757', 'BMac', '<span class="keyword">SQL</span>', 'V003_20230224210757__BMac.sql', 1731540728, 'sa', 4, 1)
 <span class="keyword">GO</span>
 <span class="keyword">USE</span> [AdventureWorksLT2019]
 <span class="keyword">GO</span>
