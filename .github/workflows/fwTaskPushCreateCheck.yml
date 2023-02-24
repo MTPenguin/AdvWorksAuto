@@ -140,6 +140,7 @@ jobs:
       # End of Environment Secrets #
       executeBuild: true
       publishArtifacts: true
+      cleanDisabled: true
  
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -155,20 +156,20 @@ jobs:
       - name: Clean build db
         if: env.executeBuild == 'true'
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info clean info -url="${{ env.JDBC }}" -cleanDisabled='false'
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info clean info -url="${{ env.JDBC }}" -cleanDisabled='${{ env.cleanDisabled }}'
         
       # Runs the Flyway Migrate command against the Build database
       - name: Migrate build db
         if: env.executeBuild == 'true'
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='false'
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info migrate info -url="${{ env.JDBC }}" -cleanDisabled='${{ env.cleanDisabled }}'
           
       # Runs the Flyway Undo command against the Build database
       # If the first undo script is U002, this will validate all undo scripts up to and including that
       - name: Undo build db
         if: env.executeBuild == 'true'
         run: |
-          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info undo info -url="${{ env.JDBC }}" -cleanDisabled='false' -target="${{ vars.FIRST_UNDO_SCRIPT }}"
+          flyway -user="${{ env.userName }}" -password="${{ env.password }}" -baselineOnMigrate="true" -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}" -configFiles="${{ github.WORKSPACE }}\flyway.conf" -locations="filesystem:${{ github.WORKSPACE }}\\migrations, filesystem:${{ github.WORKSPACE }}\\migrations-${{ env.deployment_environment }}" info undo info -url="${{ env.JDBC }}" -cleanDisabled='${{ env.cleanDisabled }}' -target="${{ vars.FIRST_UNDO_SCRIPT }}"
  
       # Create a directory to stage the artifact files
       - name: Stage files for publishing
