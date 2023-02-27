@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "002.20230224191036",
+  "schemaVersion": "003.20230224210757",
   "schemaName": "",
   "migrations": [
     {
@@ -30,6 +30,19 @@
     },
     {
       "category": "Versioned",
+      "version": "003.20230224210757",
+      "description": "BMac",
+      "type": "SQL",
+      "installedOnUTC": "2023-02-25T04:12:41.750Z",
+      "state": "Success",
+      "undoable": "Yes",
+      "filepath": "C:\\Users\\BMac\\actions-runner-auto\\_work\\AdvWorksAuto\\AdvWorksAuto\\migrations\\V003_20230224210757__BMac.sql",
+      "undoFilepath": "C:\\Users\\BMac\\actions-runner-auto\\_work\\AdvWorksAuto\\AdvWorksAuto\\migrations\\U003_20230224210757__BMac.sql",
+      "installedBy": "sa",
+      "executionTime": 42
+    },
+    {
+      "category": "Versioned",
       "version": "001.20230224120276",
       "description": "baseline",
       "type": "SQL_BASELINE",
@@ -43,20 +56,20 @@
     },
     {
       "category": "Versioned",
-      "version": "003.20230224210757",
+      "version": "004.20230224212124",
       "description": "BMac",
       "type": "SQL",
       "installedOnUTC": "",
       "state": "Pending",
       "undoable": "Yes",
-      "filepath": "C:\\Users\\BMac\\actions-runner-auto\\_work\\AdvWorksAuto\\AdvWorksAuto\\migrations\\V003_20230224210757__BMac.sql",
-      "undoFilepath": "C:\\Users\\BMac\\actions-runner-auto\\_work\\AdvWorksAuto\\AdvWorksAuto\\migrations\\U003_20230224210757__BMac.sql",
+      "filepath": "C:\\Users\\BMac\\actions-runner-auto\\_work\\AdvWorksAuto\\AdvWorksAuto\\migrations\\V004_20230224212124__BMac.sql",
+      "undoFilepath": "C:\\Users\\BMac\\actions-runner-auto\\_work\\AdvWorksAuto\\AdvWorksAuto\\migrations\\U004_20230224212124__BMac.sql",
       "installedBy": "",
       "executionTime": 0
     }
   ],
   "allSchemasEmpty": false,
-  "flywayVersion": "9.14.1",
+  "flywayVersion": "9.15.0",
   "database": "AdventureWorksLT2019",
   "warnings": [],
   "operation": "info"
