@@ -1,0 +1,26 @@
+{
+  "individualResults": [
+    {
+      "onlyInSource": [],
+      "onlyInTarget": [],
+      "differences": [],
+      "database": "AdventureWorksLT2019",
+      "timestamp": "2023-02-27T13:21:32.013177900",
+      "operation": "changes"
+    },
+    {
+      "driftDetected": false,
+      "onlyInSource": [],
+      "onlyInTarget": [],
+      "differences": [],
+      "database": "AdventureWorksLT2019",
+      "timestamp": "2023-02-27T13:21:32.013177900",
+      "operation": "drift"
+    },
+    {
+      "sql": "-- -\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n-- Flyway Dry Run (2023-02-27 13:21:54)\n-- -\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\n\n-- Executing: validate (with callbacks)\n-- ---------------------------------------------------------------------------------------\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\n\n-- Executing: migrate (with callbacks)\n-- ---------------------------------------------------------------------------------------\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\n\n-- Executing: migrate -\u003e v004.20230224212124 (with callbacks)\n-- ---------------------------------------------------------------------------------------\n\n-- Source: C:\\Users\\BMac\\actions-runner-auto\\_work\\AdvWorksAuto\\AdvWorksAuto\\migrations\\V004_20230224212124__BMac.sql\n-- -------------------------------------------------------------------------------------------------------------------\nSET NUMERIC_ROUNDABORT OFF\nGO\nSET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS, NOCOUNT ON\nGO\nSET DATEFORMAT YMD\nGO\nSET XACT_ABORT ON\nGO\nPRINT(N\u0027Update 1 row in [SalesLT].[Customer]\u0027)\r\nUPDATE [SalesLT].[Customer] SET [Suffix]\u003dN\u00271\u0027 WHERE [CustomerID] \u003d 1\nGO\nINSERT INTO [AdventureWorksLT2019].[dbo].[flyway_schema_history] ([installed_rank], [version], [description], [type], [script], [checksum], [installed_by], [execution_time], [success]) VALUES (4, \u0027004.20230224212124\u0027, \u0027BMac\u0027, \u0027SQL\u0027, \u0027V004_20230224212124__BMac.sql\u0027, -1951047084, \u0027sa\u0027, 5, 1)\nGO\nUSE [AdventureWorksLT2019]\nGO\nSET ANSI_NULLS ON\nGO\n",
+      "timestamp": "2023-02-27T13:21:32.013177900",
+      "operation": "dryrun"
+    }
+  ]
+}
